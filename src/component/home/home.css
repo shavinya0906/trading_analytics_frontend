@@ -1,0 +1,61 @@
+.dashboard-content-wrapper {
+  margin-top: 45px;
+  height: 100vh;
+}
+.dashboard-content-wrapper .dashboard-small-card {
+  width: 205px;
+  height: 59px;
+  border-radius: 11.958px;
+  border: 1.196px solid #7d67ff;
+  background: rgba(248, 247, 255, 0.64);
+  padding: 10px;
+}
+.dashboard-content-wrapper .dashboard-small-card h6 {
+  margin-bottom: 0;
+  color: #a5a2b8;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14.35px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.dashboard-content-wrapper .dashboard-small-card h5 {
+  margin-bottom: 0;
+  color: #2a2455;
+  font-family: "DM Sans", sans-serif;
+  font-size: 22.322px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.dashboard-content-wrapper .main-card-wrap .insights-card {
+  height: 434px;
+  border-radius: 8px;
+  background: rgb(53, 46, 91);
+}
+.dashboard-content-wrapper .main-card-wrap .insights-card h6 {
+  padding: 70px 23px 0;
+  color: #c8c2e8;
+  font-family: "DM Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.dashboard-content-wrapper .main-card-wrap .insights-card ul li {
+  color: #fff;
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 174.2%;
+}
+.dashboard-content-wrapper .chat-card .card-header {
+  padding: 16px 24px;
+}
+.dashboard-content-wrapper .chat-card .card-body {
+  padding: 48px 24px 44px 41px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}/*# sourceMappingURL=home.css.map */

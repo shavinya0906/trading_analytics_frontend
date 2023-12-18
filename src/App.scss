@@ -1,0 +1,279 @@
+@import "react-datepicker/dist/react-datepicker.css";
+
+// body,html{
+//   overflow: hidden;
+//   width: 100%;
+// }
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@font-face {
+  font-family: "CustomFont";
+  src: url("../src/assets/fonts/DMSans-Regular.ttf") format("truetype");
+}
+$primary: #2a2455;
+$secondary: #7d67ff;
+$light: #f0f0f3;
+$dark: #232323;
+$success: #009dff;
+$white: #ffffff;
+@import "~bootstrap/scss/bootstrap";
+.main-content-wrap {
+  padding: 30px 52px 30px;
+}
+
+.main-content-wrap.is-close {
+  width: calc(100vw - 4vw);
+  margin-left: auto;
+  transition: all 0.5s;
+}
+.main-content-wrap.is-open {
+  width: calc(100vw - 13vw);
+  margin-left: auto;
+  transition: all 0.5s;
+}
+
+// Media Query
+
+@media only screen and (max-width: 1600px) {
+  .main-content-wrap.is-open {
+    width: calc(100vw - 14.5vw);
+  }
+}
+
+.customFilterButton {
+  ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    li, button {
+      cursor: pointer;
+      width: 120px;
+      height: 50px;
+      line-height: 50px;
+      align-items: center;
+      font-weight: 500;
+      border-radius: 8px;
+      text-align: center;
+      span {
+        margin-left: 10px;
+      }
+      &:first-child {
+        background: #edeff1;
+      }
+      &:last-child {
+        background: #0075ff;
+        color: white;
+      }
+    }
+  }
+}
+
+.main-content {
+  .table_wrapper {
+    .table-responsive {
+      border-color: transparent;
+      border-width: 0;
+      table {
+        border-collapse: separate;
+        border-spacing: 0 11px;
+        background: white;
+        thead {
+          tr {
+            border-bottom: none !important;
+            height: 30px;
+            line-height: 30px;
+            th {
+              font-weight: 400;
+              border-bottom: none !important;
+            }
+          }
+        }
+        font-weight: 400;
+        tr {
+          border-style: hidden;
+          height: 70px;
+          line-height: 70px;
+          border: 1px solid rgba(239, 239, 240, 1);
+          margin-bottom: 10px;
+          border-radius: 10px;
+        }
+        tbody {
+          tr {
+            td {
+              border-top: 1px solid rgb(239, 239, 240);
+              border-bottom: 1px solid rgb(239, 239, 240);
+              &:first-child {
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+                border-left: 1px solid rgb(239, 239, 240);
+              }
+              &:last-child {
+                border-right: 1px solid rgb(239, 239, 240);
+                border-top-right-radius: 10px;
+                border-bottom-right-radius: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.popUpBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+  .filterPopUp {
+    width: 550px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0px 15px 60px 0px rgba(0, 0, 0, 0.15);
+    padding: 30px 50px 20px 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .filterPopUpHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    &::after {
+      content: "";
+      background: #efeff0;
+      height: 2px;
+      width: 550px;
+      position: absolute;
+      top: 60px;
+      left: -50px;
+    }
+    p {
+      font-size: 25px;
+      margin-bottom: 0;
+      color: rgba(0, 0, 0, 1);
+      font-weight: 600;
+    }
+    .closeFilter {
+      height: 45px;
+      width: 45px;
+      line-height: 42px;
+      text-align: center;
+      background: rgba(237, 239, 241, 1);
+      border-radius: 50%;
+    }
+  }
+  .filterPopUBody {
+    margin-top: 50px;
+    ul.mainUl {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      li.mainLi {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        .mainLiUi {
+          height: 50px;
+          line-height: 48px;
+          display: flex;
+          justify-content: space-between;
+          padding-left: 20px;
+          padding-right: 20px;
+          box-shadow: 0px 5px 10px 0px #0000000d;
+          border: 1px solid #0075ff;
+          border-radius: 6px;
+        }
+      }
+    }
+  }
+}
+.mainLiBody {
+  box-shadow: 0px 15px 30px 0px #0000001a;
+
+  ul {
+    list-style-type: none;
+    display: flex;
+    max-width: 333px;
+    padding: 50px 30px;
+    flex-wrap: wrap;
+    li {
+      width: 50%;
+      display: flex;
+      align-items: center;
+
+      .popUpInput {
+        min-width: 12px;
+        min-height: 12px;
+        -border-radius: 3px;
+        border: 1px solid #dfdfe0;
+        display: block;
+        margin-right: 10px;
+        &.active {
+          background: #0075ff;
+          border-color: #0075ff;
+        }
+      }
+    }
+  }
+}
+.submitBtn {
+  display: flex;
+  justify-content: center;
+}
+.customSubmit {
+  background: #0075ff;
+  color: white;
+  width: fit-content;
+  padding: 5px 15px;
+  border-radius: 4px;
+}
+.sidebar.is-close {
+  z-index: 1;
+}

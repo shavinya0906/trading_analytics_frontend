@@ -1,0 +1,117 @@
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(217, 217, 217);
+  margin-bottom: 40px;
+}
+.header-wrapper .header-left-wrap {
+  display: flex;
+}
+.header-wrapper .header-left-wrap .new-trade-btn {
+  border-radius: 8.444px;
+  background: #0075ff;
+  width: 216.379px;
+  color: #fff;
+  padding: 14px 51px;
+  box-shadow: none;
+  border: none;
+  margin-right: 31px;
+  max-height: 49.609px;
+}
+.header-wrapper .header-left-wrap .new-trade-btn .plus-icon {
+  margin-left: 15px;
+}
+.header-wrapper .header-left-wrap .react-datepicker-wrapper {
+  max-height: 49.609px;
+}
+.header-wrapper .header-left-wrap .outline-button-cal,
+.header-wrapper .header-left-wrap .outline-button-man {
+  border-radius: 8.444px;
+  width: 152.477px;
+  height: 44.512px;
+  box-shadow: none;
+  border: none;
+  border: 1px solid #0075ff;
+  color: #2a2455;
+  font-family: "DM Sans", sans-serif;
+  font-size: 15.153px;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-wrapper .header-left-wrap .outline-button-cal img,
+.header-wrapper .header-left-wrap .outline-button-man img {
+  margin-left: 5px;
+}
+.header-wrapper .header-left-wrap .outline-button-cal:hover,
+.header-wrapper .header-left-wrap .outline-button-man:hover {
+  background-color: #0075ff;
+  color: #fff;
+}
+.header-wrapper .header-left-wrap .outline-button-cal:hover img,
+.header-wrapper .header-left-wrap .outline-button-man:hover img {
+  margin-left: 5px;
+  filter: invert(1);
+}
+.header-wrapper .header-left-wrap .outline-button-cal {
+  margin-left: 83px;
+  margin-right: 13px;
+}
+.header-wrapper .profile-wrapper {
+  display: flex;
+  align-items: baseline;
+}
+.header-wrapper .profile-wrapper .profile-dropdown {
+  background-color: transparent;
+  border: none;
+}
+.header-wrapper .profile-wrapper .profile-dropdown::after {
+  content: url(../../assets/images/chevron-down.svg);
+  border: none;
+  margin-left: 28px;
+}
+.header-wrapper .profile-wrapper .profile-name {
+  color: #11263c;
+  text-align: right;
+  font-family: "Inter", sans-serif;
+  font-size: 18.34px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 29.803px;
+}
+
+.DateInput {
+  border-radius: 8.444px;
+  background: #f8f7ff;
+  width: 216.379px;
+  height: 49.609px;
+  box-shadow: none;
+  border: none;
+  margin-right: 31px;
+  color: #a5a2b8;
+  font-family: "DM Sans", sans-serif;
+  font-size: 16.888px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 0;
+  padding-left: 24px;
+}
+.DateInput .clock-icon {
+  width: 48.553px;
+  background-color: #0075ff;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 8.444px;
+  border-bottom-right-radius: 8.444px;
+}/*# sourceMappingURL=header.css.map */
+.clock-icon {
+  margin-left: auto;
+}

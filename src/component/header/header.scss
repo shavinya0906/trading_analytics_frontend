@@ -1,0 +1,139 @@
+.header-wrapper {
+  // margin-bottom: 67px;
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  border-bottom: 1px solid rgba(217, 217, 217, 1);
+  margin-bottom: 40px;
+  .header-left-wrap {
+    display: flex;
+
+    .new-trade-btn {
+      border-radius: 8.444px;
+      background: #0075ff;
+      width: 216.379px;
+      display: flex;
+      align-items: center;
+      color: #fff;
+      padding: 14px 51px;
+      box-shadow: none;
+      border: none;
+      margin-right: 31px;
+      max-height: 49.609px;
+      .plus-icon {
+        margin-left: 15px;
+      }
+    }
+    .react-datepicker-wrapper {
+      max-height: 49.609px;
+    }
+
+    .outline-button-cal,
+    .outline-button-man {
+      border-radius: 8.444px;
+      width: 152.477px;
+      height: 44.512px;
+      box-shadow: none;
+      border: none;
+      border: 1px solid #0075ff;
+      color: #2a2455;
+      font-family: "DM Sans", sans-serif;
+      font-size: 15.153px;
+      font-weight: 500;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      & img {
+        margin-left: 5px;
+      }
+      &:hover {
+        background-color: #0075ff;
+        color: #fff;
+        & img {
+          margin-left: 5px;
+          filter: invert(1);
+        }
+      }
+    }
+
+    .outline-button-cal {
+      margin-left: 83px;
+      margin-right: 13px;
+    }
+  }
+
+  .profile-wrapper {
+    display: flex;
+    align-items: baseline;
+
+    .profile-dropdown {
+      background-color: transparent;
+      border: none;
+
+      &::after {
+        content: url(../../assets/images/chevron-down.svg);
+        border: none;
+        margin-left: 28px;
+      }
+    }
+
+    .profile-name {
+      color: #11263c;
+      text-align: right;
+      font-family: "Inter", sans-serif;
+      font-size: 18.34px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 29.803px;
+    }
+  }
+}
+
+.DateInput {
+  border-radius: 8.444px;
+  background: #f8f7ff;
+  width: 216.379px;
+  height: 49.609px;
+  box-shadow: none;
+  border: none;
+  margin-right: 31px;
+  color: #a5a2b8;
+  font-family: "DM Sans", sans-serif;
+  font-size: 16.888px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 0;
+  padding-left: 24px;
+
+  .clock-icon {
+    width: 48.553px;
+    background-color: #0075ff;
+    margin-left: auto;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-right-radius: 8.444px;
+    border-bottom-right-radius: 8.444px;
+  }
+}
+
+.cross-icon {
+  display: flex;
+  height: 49px;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.header-title {
+  padding-left: 2rem;
+  font-weight: bold;
+  font-size: 2rem;
+}

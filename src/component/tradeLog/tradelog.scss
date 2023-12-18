@@ -1,0 +1,182 @@
+.tradelog-tbl {
+  .dropdown-toggle {
+    background-color: white !important;
+    border-radius: none;
+    border-radius: 2px;
+    color: #1f2937;
+    border: unset;
+  }
+}
+
+.table_wrapper {
+  .table-responsive {
+    border-color: #000000;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #f6f6f6;
+    border-radius: 15px;
+    border-spacing: 0;
+    border-collapse: separate;
+
+    table {
+      thead {
+        tr {
+          height: 60px;
+
+          th {
+            white-space: nowrap;
+            border-color: #dbdbdb;
+            padding: 0.5rem 1.5rem;
+            vertical-align: middle;
+            // display: flex;
+          }
+
+          &:last-child {
+            border: none;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          height: 60px;
+
+          td {
+            white-space: nowrap;
+            border-color: #dbdbdb;
+            padding: 0.5rem 1.5rem;
+            vertical-align: middle;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+
+            select {
+              min-width: 140px;
+              border-radius: 5px;
+              background: #fff;
+              border: none;
+              align-items: center;
+              display: flex;
+              width: 138px;
+              height: 35px;
+              padding: 6px 7px;
+              gap: 54px;
+            }
+
+            .submit-btn {
+              padding: 9px 16px;
+              background: #0075ff;
+              color: white;
+              border-radius: 4px;
+              text-transform: capitalize;
+              border: 1px solid transparent;
+              min-width: 70px;
+              font-size: 16px;
+              font-weight: 500;
+
+              &:hover {
+                border-color: #7d67ff;
+                color: #7d67ff;
+                background-color: #fff;
+              }
+            }
+
+            .button {
+              padding: 9px 16px;
+              background: #fff;
+              color: #7d67ff;
+              border-radius: 4px;
+              text-transform: capitalize;
+              border: 1px solid #7d67ff;
+              min-width: 85px;
+              font-size: 16px;
+              font-weight: 500;
+
+              &:hover {
+                border-color: #fff;
+                color: #fff;
+                background-color: #7d67ff;
+              }
+            }
+
+            input {
+              border: 1px solid #ccc;
+              height: 35px;
+              padding: 5px 10px;
+              border-radius: 5px;
+              max-width: 147px;
+              &:focus {
+                outline: unset;
+              }
+            }
+          }
+
+          &:last-child {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #7d67ff;
+  }
+}
+
+.save-btn {
+  padding: 9px 16px;
+  background: #7d67ff;
+  color: white;
+  border-radius: 4px;
+  text-transform: capitalize;
+  border: 1px solid transparent;
+  min-width: 100px;
+  margin-top: 20px;
+  display: block;
+  margin-left: auto;
+  font-size: 19px;
+  font-weight: 500;
+
+  &:hover {
+    border-color: #7d67ff;
+    color: #7d67ff;
+    background-color: #fff;
+  }
+}
+
+.sort-arrow {
+  // display: flex;
+  margin-left: 2rem;
+  width: 10%;
+}
+.special-col {
+  position: relative;
+  z-index: 1;
+  .img-preview {
+    background-color: #ffffff;
+    box-shadow: 0 0 25px 5px rgb(145, 145, 145);
+    width: 10rem;
+    height: 10rem;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 3;
+    img {
+      width: 100%;
+    }
+  }
+}

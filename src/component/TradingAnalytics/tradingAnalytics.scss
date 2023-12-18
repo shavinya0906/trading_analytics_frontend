@@ -1,0 +1,111 @@
+.analytics {
+  padding: 0 30px;
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .tradingAnalyticsHeaderList {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background: #edeff1;
+    height: 60px;
+    border-radius: 8px;
+    li {
+      height: 46px;
+      line-height: 46px;
+      width: calc(100% / 7);
+      text-align: center;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(157, 162, 166, 1);
+
+      .active {
+        background: #0075ff;
+        color: white;
+        border-radius: 8px;
+        padding-left: 15px;
+        padding-right: 15px;
+        width: fit-content;
+        min-width: 115px;
+      }
+    }
+  }
+}
+.tradingAnalyticsBodyUl {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2%;
+  li {
+    width: 49%;
+    height: 50px;
+    line-height: 48px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid rgba(239, 239, 240, 1);
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 2%;
+    border-radius: 8px;
+    &:hover {
+      background: rgba(0, 117, 255, 1);
+      color: white;
+    }
+  }
+}
+.tradingAnalyticsBodyMiddle {
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    h2 {
+      font-size: 25px;
+      font-weight: 700;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    li {
+      border: 1px solid rgba(239, 239, 240, 1);
+      border-radius: 10px;
+      width: 200px;
+      height: 110px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      &:first-child {
+        border: none;
+        width: auto;
+      }
+      .analyticsBox {
+        position: relative;
+        left: 15%;
+      }
+      p {
+        margin: 0;
+        &.ammount {
+          font-weight: 500;
+        }
+        &.fiscal {
+          color: rgba(157, 162, 166, 1);
+        }
+      }
+    }
+  }
+}
+.allGraph {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  .eachGraph {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+  }
+}

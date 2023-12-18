@@ -1,0 +1,112 @@
+.analytics {
+  padding: 0 30px;
+}
+.analytics ul {
+  list-style-type: none;
+  padding: 0;
+}
+.analytics .tradingAnalyticsHeaderList {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  background: #edeff1;
+  height: 60px;
+  border-radius: 8px;
+}
+.analytics .tradingAnalyticsHeaderList li {
+  height: 46px;
+  line-height: 46px;
+  width: 14.2857142857%;
+  text-align: center;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgb(157, 162, 166);
+}
+.analytics .tradingAnalyticsHeaderList li .active {
+  background: #0075ff;
+  color: white;
+  border-radius: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 115px;
+}
+
+.tradingAnalyticsBodyUl {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+.tradingAnalyticsBodyUl li {
+  width: 49%;
+  height: 50px;
+  line-height: 48px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgb(239, 239, 240);
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 2%;
+  border-radius: 8px;
+}
+.tradingAnalyticsBodyUl li:hover {
+  background: rgb(0, 117, 255);
+  color: white;
+}
+
+.tradingAnalyticsBodyMiddle ul {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.tradingAnalyticsBodyMiddle ul h2 {
+  font-size: 25px;
+  font-weight: 700;
+}
+.tradingAnalyticsBodyMiddle ul h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.tradingAnalyticsBodyMiddle ul li {
+  border: 1px solid rgb(239, 239, 240);
+  border-radius: 10px;
+  width: 200px;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tradingAnalyticsBodyMiddle ul li:first-child {
+  border: none;
+  width: auto;
+}
+.tradingAnalyticsBodyMiddle ul li .analyticsBox {
+  position: relative;
+  left: 15%;
+}
+.tradingAnalyticsBodyMiddle ul li p {
+  margin: 0;
+}
+.tradingAnalyticsBodyMiddle ul li p.ammount {
+  font-weight: 500;
+}
+.tradingAnalyticsBodyMiddle ul li p.fiscal {
+  color: rgb(157, 162, 166);
+}
+
+.allGraph {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.allGraph .eachGraph {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}/*# sourceMappingURL=tradingAnalytics.css.map */

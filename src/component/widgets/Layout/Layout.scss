@@ -1,0 +1,58 @@
+/* src/components/Layout.css */
+
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+  }
+  
+  .header {
+    background-color: #333;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .content-wrapper {
+    display: flex;
+    flex: 1;
+    position: relative;
+    z-index: 1; /* Ensure the content appears above the sidebar */
+  }
+  
+  .sidebar {
+    background-color: #555;
+    color: white;
+    width: 250px;
+    padding: 16px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -250px; /* Hide the sidebar to the left initially */
+    transition: left 0.3s ease; /* Add a smooth transition */
+  }
+  
+  .sidebar.open {
+    left: 0; /* Show the sidebar when it's open */
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 16px;
+  }
+  

@@ -1,0 +1,136 @@
+.page-wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+a,
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+/* ---------------------------------------------------
+      SIDEBAR STYLE
+  ----------------------------------------------------- */
+.sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  padding: 20px 33px;
+  margin-left: -250px;
+  transition: all 0.5s;
+  height: 100%;
+  background: #0e0c15;
+}
+
+.sidebar.is-open {
+  margin-left: 0;
+  transition: all 0.5s;
+  position: fixed;
+}
+
+.sidebar.is-close {
+  min-width: 90px;
+  max-width: 90px;
+  margin-left: 0px;
+  position: fixed;
+}
+
+.nav-items {
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+.nav {
+  padding-left: unset !important;
+}
+
+.sidebar-header {
+  padding: 28px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap !important;
+}
+
+.collapse.show,
+.collapsing {
+  background: #313b4c;
+}
+
+.nav-item.open {
+  color: #e9ecef;
+  background: #313b4c;
+}
+
+.nav-item .nav-link {
+  color: #fff;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.nav-item.active .nav-link {
+  color: #7d67ff;
+}
+
+.nav-item:hover .nav-link {
+  color: #7d67ff;
+  transition: 0.2s;
+}
+
+.nav-item .svg-inline--fa {
+  color: inherit;
+}
+
+li a.dropdown-toggle::after {
+  display: inline-flex;
+  position: relative;
+  left: 60%;
+  top: 10%;
+}
+
+.sidebar-header > button {
+  position: relative;
+  float: right;
+  margin: 0.5em;
+  font-size: 2rem;
+  cursor: pointer;
+  display: none;
+}
+
+/* ---------------------------------------------------
+      CONTENT STYLE
+  ----------------------------------------------------- */
+.content {
+  padding: 20px;
+  margin-left: 0;
+  height: 100vh;
+}
+
+@media only screen and (max-width: 575.98px) {
+  body {
+    overflow: hidden;
+  }
+  .content.is-open {
+    /*margin-left: 100%;*/
+    transition: all 0.5s;
+  }
+  .sidebar.is-open {
+    min-width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    transition: all 0.5s, height 0s;
+    height: 100vh !important;
+  }
+  .sidebar.is-open > .sidebar-header button {
+    display: block;
+  }
+  li a.dropdown-toggle::after {
+    display: inline-block;
+    position: relative;
+    left: 68%;
+  }
+}/*# sourceMappingURL=Sidebar.css.map */
