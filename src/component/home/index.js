@@ -7,6 +7,7 @@ import { getDashbordData } from "../../store/slice/homeSlice";
 import CurveChart from "../Charts/CurveChart";
 import { GroupedBarChart } from "../Charts/GroupedBarChart";
 import { DailyPnlChart } from "../Charts/DailyPnlChart";
+import { insightsData } from "./data";
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -36,7 +37,7 @@ const Home = () => {
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.karmaFactor?.toFixed(2)}</h5>
+            <h5>{dataList?.karmaFactor&&dataList?.karmaFactor[0]?.toFixed(2)}</h5>
               <h6>Karma Factor</h6>
             </div>
           </div>
@@ -62,13 +63,13 @@ const Home = () => {
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.avgWinningTrade?.toFixed(2)}%</h5>
+            <h5>{dataList?.avgWinningTrade?.toFixed(2)}</h5>
               <h6>Average winning trade</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.avgLosingTrade?.toFixed(2)}%</h5>
+            <h5>{dataList?.avgLosingTrade?.toFixed(2)}</h5>
               <h6>Average losing trade</h6>
             </div>
           </div>
@@ -79,14 +80,42 @@ const Home = () => {
             <div className="insights-card chat-card list-box">
               <h6>Insights</h6>
               <ul id="arrow-list">
-                <li>
-                  It is a long established fact that a reader will be distracted by the readable.
+              <li>
+                  {dataList?.netPNL?.toFixed(2)
+                    ? insightsData[0]
+                    : insightsData[1]}
+                  {/* It is a long established fact that a reader will be distracted by the readable. */}
                 </li>
                 <li>
-                  It is a long established fact that a reader will be distracted by the readable.
+                  {dataList?.karmaFactor&&dataList?.karmaFactor[1] < 4 * dataList.karmaFactor[2]
+                    ? insightsData[2]
+                    : insightsData[3]}
+                  {/* It is a long established fact that a reader will be distracted by the readable. */}
                 </li>
-                <li>It is a long established fact that a reader will be distracted by the readable.</li>
-                <li>It is a long established fact that a reader will be distracted by the readable.</li>
+                <li>
+                  {dataList?.maxDD?.toFixed(2) > 25
+                    ? insightsData[4]
+                    : insightsData[5]}
+                  {/* It is a long established fact that a reader will be distracted by the readable. */}
+                </li>
+                <li>
+                  {dataList?.winPercentage > 50 && dataList?.netPNL > 0
+                    ? insightsData[6]
+                    : dataList?.winPercentage > 50 && dataList?.netPNL < 0
+                    ? insightsData[7]
+                    : dataList?.winPercentage < 50 && dataList?.netPNL > 0
+                    ? insightsData[8]
+                    : insightsData[9]}
+                  {/* It is a long established fact that a reader will be distracted
+                  by the readable. */}
+                </li>
+                <li>
+                  {dataList?.RRratio < 0.5
+                    ? insightsData[10]
+                    : insightsData[11]}
+                  {/* It is a long established fact that a reader will be distracted*/}
+                </li>
+
               </ul>
             </div>
           </div>
@@ -94,7 +123,9 @@ const Home = () => {
             <Card>
               {/* <Card.Header>Equity Curve</Card.Header> */}
               <p>Equity Curve</p>
-              <div className="card-body"><CurveChart dataList={dataList}/></div>
+              <div className="card-body">
+                <CurveChart dataList={dataList} />
+              </div>
             </Card>
           </div>
         </div>
@@ -104,7 +135,9 @@ const Home = () => {
             <Card>
               <p>Strategy Performance</p>
               {/* <Card.Header>Strategy Performance</Card.Header> */}
-              <div className="card-body"><GroupedBarChart dataList={dataList} /></div>
+              <div className="card-body">
+                <GroupedBarChart dataList={dataList} />
+              </div>
               {/* <div className="card-body"><BarChart dataList={dataList} /></div> */}
             </Card>
           </div>
@@ -112,7 +145,9 @@ const Home = () => {
             <Card>
               <p>Daily PNL</p>
               {/* <Card.Header>Daily PNL</Card.Header> */}
-              <div className="card-body"><DailyPnlChart dataList={dataList} /></div>
+              <div className="card-body">
+                <DailyPnlChart dataList={dataList} />
+              </div>
               {/* <div className="card-body"><BarChart dataList={dataList} /></div> */}
             </Card>
           </div>

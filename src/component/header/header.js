@@ -16,10 +16,15 @@ import {
   calenderStart,
   tradeLogUpdateFilter,
 } from "../../store/slice/tradeLogSlice";
+import { dashboardUpdateData } from "../../store/slice/homeSlice";
 import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const logout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
   const reduxData = useSelector((state) => state);
   const excludeLeftWrap = [
     {
@@ -31,7 +36,8 @@ const Header = () => {
       title: "Trading Accounts",
     },
   ];
-  const location = useLocation();  const token = reduxData?.auth?.token;
+  const location = useLocation();
+  const token = reduxData?.auth?.token;
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
@@ -81,13 +87,17 @@ const Header = () => {
     const endDate = currentEnd || oldEnd;
 
     let makePayload = `?assetClass=${asset}&conviction=${conv}&strategyUsed=${strag}&minPnL=100&maxPnl=400&holdingTradeType=${holding}&tradingAccount=${tradeAcc}&startDate=${startDate}&endDate=${endDate}`;
+    let dashboardPayloadUrl = `?startDate=${startDate}&endDate=${endDate}`;
     dispatch(tradeLogUpdateFilter({ toke: token, values: makePayload }));
+    dispatch(
+      dashboardUpdateData({ token: token, values: dashboardPayloadUrl })
+    );
   };
 
   useEffect(() => {
     var url = window.location.pathname;
     var filename = url.substring(url.lastIndexOf("/") + 1);
-    if (filename == "tradelog") {
+    if (filename == "tradelog" || filename == "dashboard") {
       endDate && sumitFilterData();
     } else if (filename == "trader-analytics") {
       const startDate = currentStart || oldStart;
@@ -141,10 +151,12 @@ const Header = () => {
             >
               X
             </div>
-            <Button variant="outline-primary" className="outline-button-cal">
-              Calendar
-              <img src={calander} alt="plus" className="plus-icon" />
-            </Button>
+            <Link to={"/calendar"} style={{ textDecoration: "none" }}>
+              <Button variant="outline-primary" className="outline-button-cal">
+                Calendar
+                <img src={calander} alt="plus" className="plus-icon" />
+              </Button>
+            </Link>
             <Button variant="outline-primary" className="outline-button-man">
               Mantra
               <img src={handMoney} alt="plus" className="plus-icon" />
@@ -161,9 +173,9 @@ const Header = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+              <Dropdown.Item href="#" onClick={logout}>
+                Logout
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           {/* <h3 className="profile-name">Bessie Cooper</h3> */}

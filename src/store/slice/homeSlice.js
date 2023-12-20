@@ -8,7 +8,9 @@ export const getDashbordData = createAsyncThunk("auth/getDashbordData", async (t
     const response = await axios.get(`${apiUrl}/trade/dashboard`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token}`,
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json"
       },
     });
     return response.data;
@@ -16,6 +18,23 @@ export const getDashbordData = createAsyncThunk("auth/getDashbordData", async (t
     throw error;
   }
 });
+
+export const dashboardUpdateData = createAsyncThunk(
+  "auth/getDashboardData",
+  async (data) => {
+    console.log(data)
+    const response = await axios.get(`${apiUrl}/trade/dashboard/${data.values}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${data?.token}`,
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json"
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  }
+);
 
 const homeSlice = createSlice({
   name: "dashboard",
@@ -35,7 +54,19 @@ const homeSlice = createSlice({
       .addCase(getDashbordData.rejected, (state, action) => {
         state.data = action.payload;
         state.isLoading = false;
-      });
+      })
+
+      .addCase(dashboardUpdateData.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(dashboardUpdateData.fulfilled, (state, action) => {
+        state.data = action?.payload;
+        state.isLoading = false;
+      })
+      .addCase(dashboardUpdateData.rejected, (state, action) => {
+        state.data = action?.payload;
+        state.isLoading = false;
+      })
   },
 });
 

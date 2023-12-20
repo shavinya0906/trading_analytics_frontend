@@ -106,12 +106,16 @@ const Sidebar = ({ state, setState }) => {
           )}
         </Nav>
         <Nav className="sidebar-header">
+        <Nav.Item>
+            <Nav.Link href="/tools">
           <img src={SettingLogo} alt="Logo" />
           {state?.collapsed ? (
             <span className="text-light nav-items ms-2">Tools</span>
           ) : (
             ""
           )}
+          </Nav.Link>
+        </Nav.Item>
         </Nav>
       </div>
     </div>

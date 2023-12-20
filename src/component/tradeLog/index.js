@@ -14,12 +14,15 @@ import moment from "moment";
 import { getColumnData } from "../../store/slice/newColumnSlice";
 import EditIcon from "../../assets/images/editFilter.svg";
 import FilterIcon from "../../assets/images/filterIcon.svg";
+import ExportIcon from "../../assets/images/export.svg";
 import PopUpFilter from "../home/PopUpFilter";
 import OutsideClick from "../home/OutsideClick";
 import ArrowUP from "../../assets/images/arrowUp.svg";
 import DownArrow from "../../assets/images/arrowDown.svg";
 import { strategyList } from "../../store/slice/strategySlice";
 import { tradingAccountList } from "../../store/slice/tradingAccountsSlice";
+import { CSVLink } from "react-csv";
+import NoTradeData from "./../../assets/images/noTradeLogData.svg";
 
 const tableHeading = [
   "Date",
@@ -46,8 +49,8 @@ const tableHeading = [
   "Trading account",
   "Opening Balance",
   "Image",
-  "Daily questionnaire",
-  "Trade Customizable",
+  // "Daily questionnaire",
+  // "Trade Customizable",
 ];
 
 const tableHeadingObj = {
@@ -78,8 +81,8 @@ const tableHeadingObj = {
   "Trading account": { label: "trading_account", type: "string" },
   "Opening Balance": { label: "opening_balance", type: "number" },
   Image: { label: "image", type: "string" },
-  "Trade Customizable": { label: "trade_customizable", type: "string" },
-  "Daily questionnaire": { label: "comment", type: "string" },
+  // "Trade Customizable": { label: "trade_customizable", type: "string" },
+  // "Daily questionnaire": { label: "comment", type: "string" },
 };
 
 function TradeLog() {
@@ -88,7 +91,7 @@ function TradeLog() {
   const formikRef = useRef(null);
   const [showPrev, setShowPrev] = useState(false);
   const token = useSelector((state) => state?.auth?.token);
-  const reduxData = useSelector((state) => state?.trades?.data.data);
+  const reduxData = useSelector((state) => state?.trades?.data);
   const { start, end } = useSelector((state) => state?.trades);
   useEffect(() => {
     if (end) {
@@ -117,7 +120,6 @@ function TradeLog() {
   const [tradeList, setTradeList] = useState([]);
   useEffect(() => {
     if (reduxData?.length) {
-      console.log(reduxData);
       setTradeList((prev) => reduxData);
     }
   }, [reduxData]);
@@ -186,6 +188,18 @@ function TradeLog() {
     comment: Yup.string(),
   });
 
+  function filterEmptyValues(obj) {
+    const filteredObject = {};
+
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key) && obj[key] !== "") {
+        filteredObject[key] = obj[key];
+      }
+    }
+
+    return filteredObject;
+  }
+
   const handleAddSubmit = async (values, { resetForm }) => {
     console.log({ ...values, image });
     for (const obj of columnDetail) {
@@ -204,11 +218,21 @@ function TradeLog() {
       }
     }
     values.trade_date = moment(values?.trade_date).format("yyyy-MM-DD");
-    const imageBase = await getBase64(image);
-    const payload = {
+    let payload = {
       token: token,
-      values: { ...values, image: imageBase },
+      values: filterEmptyValues(values),
+      // values: { ...values, image: imageBase },
     };
+    if (image) {
+      const imageBase = await getBase64(image);
+      payload = {
+        ...payload,
+        values: {
+          ...payload.values,
+          image: imageBase,
+        },
+      };
+    }
 
     setTradeList((prev) => [payload.values, ...prev]);
     dispatch(tradeLogAdd(payload));
@@ -337,7 +361,7 @@ function TradeLog() {
     setTradeList(sortedData);
   };
 
-  return tradeList && tradeList.length ? (
+  return (tradeList && tradeList.length) ? (
     <div className="main-content demo-b">
       {popUp && (
         <div ref={ref}>
@@ -375,6 +399,25 @@ function TradeLog() {
                 <span>
                   <img src={EditIcon} alt="edit filter" />
                 </span>
+              </li>
+              <li className="export-data">
+                <CSVLink
+                  data={tradeList.map((el) => ({
+                    ...el,
+                    trade_date: new Date(el.trade_date).toDateString(),
+                    // trade_date: "ss"
+                  }))}
+                  headers={Object.keys(tableHeadingObj).map((heading) => {
+                    return {
+                      key: tableHeadingObj[heading].label,
+                      label: heading.toLowerCase().replace(/\s+/g, "_"),
+                    };
+                  })}
+                  filename={"tradelog-exports.csv"}
+                >
+                  Export
+                  <img src={ExportIcon} alt="main filter" />
+                </CSVLink>
               </li>
               <li onClick={togglePopUp}>
                 Filters{" "}
@@ -572,7 +615,9 @@ function TradeLog() {
                             <option>Select</option>
                             {strategies?.length > 0 &&
                               strategies.map((el) => (
-                                <option>{el.strategies_name}</option>
+                                <option key={el.strategies_name}>
+                                  {el.strategies_name}
+                                </option>
                               ))}
                             {/* <option value="Strategy 1">Strategy 1</option>
                             <option value="Strategy 2">Strategy 2</option> */}
@@ -741,8 +786,8 @@ function TradeLog() {
                           </button>
                           <ErrorMessage name="image" component="div" />
                         </td>
-                        <td>
-                          {/* Render daily questionnaire input field */}
+                        {/* <td>
+                          Render daily questionnaire input field
                           <Field type="text" name="comment" />
                           <ErrorMessage name="comment" component="div" />
                         </td>
@@ -752,7 +797,7 @@ function TradeLog() {
                             name="trade_customizable"
                             component="div"
                           />
-                        </td>
+                        </td> */}
                         {/* {columnDetail?.length > 0 &&
                           columnDetail?.map((items) => (
                             <td>
@@ -781,7 +826,6 @@ function TradeLog() {
                 </Formik>
                 {tradeList?.length > 0 &&
                   tradeList?.map((item, index) => {
-                    console.log(item?.asset_class);
                     return (
                       <Formik
                         key={index}
@@ -1414,7 +1458,7 @@ function TradeLog() {
                                   }}
                                 />
                               </td>
-                              <td>
+                              {/* <td>
                                 {edit ? (
                                   <>
                                     <Field
@@ -1461,7 +1505,7 @@ function TradeLog() {
                                 ) : (
                                   item?.trade_customizable
                                 )}
-                              </td>
+                              </td> */}
 
                               <td>
                                 {/* { <button
@@ -1485,6 +1529,15 @@ function TradeLog() {
           </div>
         </div>
       </div>
+    </div>
+  ) : tradeList?.length===0 ? (
+    <div style={{
+      marginTop:"100px",
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center",
+    }}>
+    <img src={NoTradeData} alt="noTradeLogDataFound"/>
     </div>
   ) : (
     <div className="customFilterButton">

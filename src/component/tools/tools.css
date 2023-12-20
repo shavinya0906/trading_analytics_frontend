@@ -1,0 +1,160 @@
+.tools {
+    padding: 0 30px;
+    width: 100%;
+  }
+  .tools ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .toolsHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width:850px;
+  }
+  .tools .toolsHeaderList {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* justify-content: space-between; */
+    height: 60px;
+    border-radius: 8px;
+}
+.tools .toolsHeaderList li {
+    background: #edeff1;
+    margin:0 0.75%;
+    height: 46px;
+    line-height: 46px;
+    text-align: center;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgb(157, 162, 166);
+    border-radius: 8px;
+    min-width: 185px;
+  }
+  .tools .toolsHeaderList li .active {
+    background: #0075ff;
+    border-radius: 8px;
+    color: white;
+    min-width: 185px;
+    width: -moz-fit-content; 
+     width: fit-content;
+  }
+
+  .customDateInput {
+  border-radius: 8.444px;
+  background: #F7F7F8;
+  width: 300px;
+  height: 60px;
+  box-shadow: none;
+  border: none;
+  margin-right: 31px;
+  color: #000000;
+  font-family: "DM Sans", sans-serif;
+  font-size: 16.888px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 0;
+  padding-left: 24px;
+}
+
+.select-width{
+    background: #F7F7F8;
+    width: 260px;
+    height: 60px;
+    border: none;
+    color: #000000;
+    font-family: "DM Sans", sans-serif;
+    font-size: 16.888px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.customDateInput .arrow-icon {
+  width: 48.553px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 8.444px;
+  border-bottom-right-radius: 8.444px;
+}
+
+.arrow-icon {
+  margin-left: auto;
+}
+
+.customSessionRow{
+  margin-bottom: 16px;
+}
+
+input.customDateInput::placeholder,textarea.customDateInput::placeholder{
+  color:#000000;
+}
+
+textarea.customDateInput{
+  min-height:278px;
+  min-width:830px;
+  padding:10px;
+}
+
+.sessions-container{
+  border:#EFEFF0 2px solid;
+  padding:20px;
+}
+
+.sessions-lessons{
+  font-family: "DM Sans", sans-serif;
+  font-size: 16px;
+  line-height: 19.36px;
+  font-weight: 400;
+}
+
+.reset-button{
+  width:115px;
+}
+
+.future-simulator-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  border:#EFEFF0 2px solid;
+  padding:5px;
+  border-radius: 8px;
+}
+
+.fs-date-selector{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.graph-container{
+  border:#EFEFF0 2px solid;
+  padding:20px;
+  border-radius: 8px;
+  width:980px;
+  h2{
+    font-family: "DM Sans", sans-serif;
+    font-size: 25px;
+    line-height: 32.55px;
+    font-weight: 700;
+    margin-bottom:20px;
+  }
+}
+
+.buttons-section{
+  min-width:250px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+
+}

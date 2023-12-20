@@ -6,6 +6,7 @@ import CanvasJSReact from "@canvasjs/react-charts";
 const CanvasJS = CanvasJSReact.CanvasJS;
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const CurveChart = ({ dataList }) => {
+  console.log("changed");
   const [dataPoints, setDataPoints] = useState([]);
 
   const sortDataBy = (data) => {
@@ -22,18 +23,24 @@ const CurveChart = ({ dataList }) => {
       }
       return 0;
     });
-    return sortedData.filter((el, i) => i !== 0);
+    return sortedData;
+    // return sortedData.filter((el, i) => i !== 0);
   };
 
   useEffect(() => {
     if (dataList?.equityCurveData?.length) {
       const data = sortDataBy(dataList?.equityCurveData);
+      console.log("came here againnn")
+      console.log(data);
       setDataPoints(
         data.map((el) => ({
           x: new Date(el?.date.toString().slice(0, 10)),
           y: parseInt(el?.equity),
         }))
       );
+    }
+    else{
+      setDataPoints([]);
     }
   }, [dataList]);
   const options = {
@@ -52,7 +59,7 @@ const CurveChart = ({ dataList }) => {
       {
         yValueFormatString: "####",
         xValueFormatString: "DDMM",
-        type: "spline",
+        type: "area",
         dataPoints: dataPoints,
         // dataPoints: [
         //   { x: new Date(2017, 0, 1), y: 1200 },

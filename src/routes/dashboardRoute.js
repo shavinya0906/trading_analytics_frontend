@@ -6,6 +6,8 @@ import Home from "../component/home";
 import Strategies from "../component/strategies/Strategies";
 import TradingAccounts from "../component/tradingAccounts/TradingAccounts";
 import TradeAnalytics from "../component/TradingAnalytics";
+import Tools from "../component/tools"
+import Calendar from "../component/calendar";
 
 const DashboardRouter = ({ state }) => {
   return (
@@ -21,6 +23,8 @@ const DashboardRouter = ({ state }) => {
           <Route path="/strategies" element={<Strategies />} />
           <Route path="/trading-accounts" element={<TradingAccounts />} />
           <Route path="/trader-analytics" element={<TradeAnalytics />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/calendar" element={<Calendar />} />
 
           <Route path="/" element={<Home />} />
         </Routes>

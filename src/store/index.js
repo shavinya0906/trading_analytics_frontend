@@ -8,9 +8,11 @@ import userReducer from "./slice/userSlice";
 import tradeLogReducer from "./slice/tradeLogSlice";
 import tradingAccountsReducer from "./slice/tradingAccountsSlice"
 import dashboardReducer from "./slice/homeSlice";
-import strategyReducer from "./slice/strategySlice"
+import strategyReducer from "./slice/strategySlice";
+import sessionReducer from "./slice/sessionSlice";
 import columnReducer from "./slice/newColumnSlice";
 import tradeAnalyticsSlice from "./slice/tradeAnalyticsSlice";
+import toolSlice from "./slice/toolSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -18,9 +20,11 @@ const rootReducer = combineReducers({
   trades: tradeLogReducer,
   tradingAccounts: tradingAccountsReducer,
   strategy: strategyReducer,
+  session: sessionReducer,
   dashboard: dashboardReducer,
   columnList: columnReducer,
   analytics: tradeAnalyticsSlice,
+  tools:toolSlice,
 });
 
 const persistConfig = {
