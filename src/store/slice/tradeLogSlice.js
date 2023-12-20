@@ -6,7 +6,9 @@ const apiUrl = process.env.REACT_APP_API_URL;
 export const tradeLogList = createAsyncThunk(
   "tradeLog/tradeLogList",
   async (token) => {
-    const response = await axios.get(`${apiUrl}/trade`, {
+    var url = window.location.pathname;
+    var filename = url.substring(url.lastIndexOf("/") + 1);
+    const response = await axios.get(`${apiUrl}/trade/?filename=${filename}`, {
       headers: {
         "Content-Type": "multipart/form-data",
         authorization: `Bearer ${token}`,
@@ -19,6 +21,7 @@ export const tradeLogList = createAsyncThunk(
 export const tradeLogAdd = createAsyncThunk(
   "tradeLog/tradeLogAdd",
   async (data) => {
+    
     if (!data?.values.trade_target) {
       data.values.trade_target = 0;
     }
