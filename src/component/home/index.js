@@ -10,13 +10,28 @@ import { DailyPnlChart } from "../Charts/DailyPnlChart";
 import { insightsData } from "./data";
 
 const Home = () => {
-    const dispatch = useDispatch()
-    const token = useSelector((state) => state?.auth?.token);
-    const dataList = useSelector((state) => state?.dashboard?.data)
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state?.auth?.token);
+  const dataList = useSelector((state) => state?.dashboard?.data);
 
-    useEffect(() => {
-        dispatch(getDashbordData(token))
-    },[])
+  useEffect(() => {
+    dispatch(getDashbordData(token));
+  }, []);
+
+  const isOneMonthGap = (startDate, endDate) => {
+    // Assuming startDate and endDate are Date objects
+    if (startDate && endDate) {
+      const oneMonthInMillis = 30 * 24 * 60 * 60 * 1000; // Assuming 30 days in a month
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Calculate the difference in milliseconds
+      const timeDiff = end.getTime() - start.getTime();
+
+      // Check if the difference is greater than or equal to one month
+      return timeDiff >= oneMonthInMillis;
+    }
+  };
 
   return (
     <>
@@ -37,7 +52,9 @@ const Home = () => {
           </div>
           <div className="dashboard-small-card">
             <div className="">
-            <h5>{dataList?.karmaFactor&&dataList?.karmaFactor[0]?.toFixed(2)}</h5>
+              <h5>
+                {dataList?.karmaFactor && dataList?.karmaFactor[0]?.toFixed(2)}
+              </h5>
               <h6>Karma Factor</h6>
             </div>
           </div>
@@ -63,13 +80,13 @@ const Home = () => {
           </div>
           <div className="dashboard-small-card">
             <div className="">
-            <h5>{dataList?.avgWinningTrade?.toFixed(2)}</h5>
+              <h5>{dataList?.avgWinningTrade?.toFixed(2)}</h5>
               <h6>Average winning trade</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-            <h5>{dataList?.avgLosingTrade?.toFixed(2)}</h5>
+              <h5>{dataList?.avgLosingTrade?.toFixed(2)}</h5>
               <h6>Average losing trade</h6>
             </div>
           </div>
@@ -80,14 +97,15 @@ const Home = () => {
             <div className="insights-card chat-card list-box">
               <h6>Insights</h6>
               <ul id="arrow-list">
-              <li>
+                <li>
                   {dataList?.netPNL?.toFixed(2)
                     ? insightsData[0]
                     : insightsData[1]}
                   {/* It is a long established fact that a reader will be distracted by the readable. */}
                 </li>
                 <li>
-                  {dataList?.karmaFactor&&dataList?.karmaFactor[1] < 4 * dataList.karmaFactor[2]
+                  {dataList?.karmaFactor &&
+                  dataList?.karmaFactor[1] < 4 * dataList.karmaFactor[2]
                     ? insightsData[2]
                     : insightsData[3]}
                   {/* It is a long established fact that a reader will be distracted by the readable. */}
@@ -115,7 +133,38 @@ const Home = () => {
                     : insightsData[11]}
                   {/* It is a long established fact that a reader will be distracted*/}
                 </li>
-
+                <li>
+                  {(!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.totalTradeCharges >=
+                      0.8 * dataList?.openingBalance) ||
+                  (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.totalTradeCharges >= 0.8 * dataList?.openingBalance)
+                    ? insightsData[12]
+                    : (!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                        dataList?.totalTradeCharges <
+                          0.8 * dataList?.openingBalance) ||
+                      (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                        dataList?.totalTradeCharges < 0.8 * dataList?.openingBalance)
+                    ? insightsData[13]
+                    : insightsData[14]}
+                  {/* It is a long established fact that a reader will be distracted*/}
+                </li>
+                <li>
+                  {(!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.totalTradePenalties >=
+                      0.2 * dataList?.openingBalance) ||
+                  (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.totalTradePenalties >= 0.2 * dataList?.openingBalance)
+                    ? insightsData[15]
+                    : (!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                        dataList?.totalTradePenalties <
+                          0.2 * dataList?.openingBalance) ||
+                      (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                        dataList?.totalTradePenalties < 0.2 * dataList?.openingBalance)
+                    ? insightsData[16]
+                    : insightsData[17]}
+                  {/* It is a long established fact that a reader will be distracted*/}
+                </li>
               </ul>
             </div>
           </div>

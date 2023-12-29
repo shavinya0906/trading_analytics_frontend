@@ -12,6 +12,15 @@ import * as XLSX from "xlsx";
 import { sessionList, sessionAdd } from "../../store/slice/sessionSlice";
 
 const Tools = () => {
+  const [expandedIndexes, setExpandedIndexes] = useState([]);
+
+  const toggleExpand = (index) => {
+    if (expandedIndexes.includes(index)) {
+      setExpandedIndexes(expandedIndexes.filter((i) => i !== index));
+    } else {
+      setExpandedIndexes([...expandedIndexes, index]);
+    }
+  };
   const [sessions, setSessions] = useState([]);
   const sessionsFormData = useRef({
     session_startDate: null,
@@ -136,13 +145,23 @@ const Tools = () => {
   };
 
   const onSaveSession = () => {
-    if(sessionsFormData.current.startDate!=null||sessionsFormData.current.startDate!=''&&
-    sessionsFormData.current.endDate!=null||sessionsFormData.current.endDate!=''&&
-    sessionsFormData.current.session_category!=null||sessionsFormData.current.session_category!=''&&
-    sessionsFormData.current.session_rating!=null||sessionsFormData.current.session_rating!=''&&
-    sessionsFormData.current.session_lessonsLearned!=null||sessionsFormData.current.session_lessonsLearned!='')
-    dispatch(sessionAdd({ ...sessionsFormData.current, token: token }));
-    else{
+    if (
+      sessionsFormData.current.startDate != null ||
+      (sessionsFormData.current.startDate != "" &&
+        sessionsFormData.current.endDate != null) ||
+      (sessionsFormData.current.endDate != "" &&
+        sessionsFormData.current.session_category != null) ||
+      (sessionsFormData.current.session_category != "" &&
+        sessionsFormData.current.session_rating != null) ||
+      (sessionsFormData.current.session_rating != "" &&
+        sessionsFormData.current.session_lessonsLearned != null) ||
+      sessionsFormData.current.session_lessonsLearned != ""
+    ){
+      dispatch(sessionAdd({ ...sessionsFormData.current, token: token }));
+      // dispatch(sessionList(token));
+      onResetSessionsData();
+    }
+    else {
       console.log("Fill all the required fields first..");
     }
   };
@@ -315,11 +334,12 @@ const Tools = () => {
                 </Container>
                 {sessionList.length > 0 && (
                   <Container>
-                    <Row style={{height:"20px"}}>
-                    </Row>
+                    <Row style={{ height: "20px" }}></Row>
                     <Row>
-                      <Col style={{textAlign:"center"}}>
-                        <p style={{fontWeight:"500",fontSize:"20px"}}>Previous added sessions</p>
+                      <Col style={{ textAlign: "center" }}>
+                        <p style={{ fontWeight: "500", fontSize: "20px" }}>
+                          Previous added sessions
+                        </p>
                       </Col>
                     </Row>
                     <Row>
@@ -336,13 +356,52 @@ const Tools = () => {
                           </thead>
                           <tbody>
                             {sessions.map((item, i) => {
+                              const shortText =
+                                item.session_lessonsLearned.substring(0, 50);
+                              const fullText = item.session_lessonsLearned;
+                              const isExpanded = expandedIndexes.includes(i);
+
                               return (
                                 <tr key={i}>
                                   <td>{formatDate(item.session_startDate)}</td>
                                   <td>{formatDate(item.session_endDate)}</td>
                                   <td>{item.session_category}</td>
                                   <td>{item.session_rating}</td>
-                                  <td>{item.session_lessonsLearned}</td>
+                                  <td
+                                    style={{
+                                      width: "250px",
+                                      maxWidth: "250px", // Adjust the value based on your preference
+                                      wordWrap: "break-word",
+                                      overflowWrap: "break-word",
+                                    }}
+                                  >
+                                    {isExpanded ? (
+                                      <>
+                                        {fullText}
+                                        <a
+                                          href="#"
+                                          onClick={() => toggleExpand(i)}
+                                        >
+                                          ...View less
+                                        </a>
+                                      </>
+                                    ) : (
+                                      <>
+                                        {shortText}
+                                        {fullText.length > 50 && (
+                                          <>
+                                            {" "}
+                                            <a
+                                              href="#"
+                                              onClick={() => toggleExpand(i)}
+                                            >
+                                              ...Read more
+                                            </a>
+                                          </>
+                                        )}
+                                      </>
+                                    )}
+                                  </td>
                                 </tr>
                               );
                             })}

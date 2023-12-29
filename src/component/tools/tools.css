@@ -99,7 +99,8 @@ input.customDateInput::placeholder,textarea.customDateInput::placeholder{
 }
 
 textarea.customDateInput{
-  min-height:278px;
+  min-height: 278px;
+  max-height: 278px;
   min-width:830px;
   padding:10px;
 }

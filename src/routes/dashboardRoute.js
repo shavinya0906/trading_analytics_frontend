@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes,Navigate } from "react-router-dom";
 import TradeLog from "../component/tradeLog";
 import Header from "../component/header/header";
 import { Container } from "react-bootstrap";
@@ -8,6 +8,7 @@ import TradingAccounts from "../component/tradingAccounts/TradingAccounts";
 import TradeAnalytics from "../component/TradingAnalytics";
 import Tools from "../component/tools"
 import Calendar from "../component/calendar";
+import Calculator from "../component/calculator";
 
 const DashboardRouter = ({ state }) => {
   return (
@@ -25,8 +26,12 @@ const DashboardRouter = ({ state }) => {
           <Route path="/trader-analytics" element={<TradeAnalytics />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/calendar" element={<Calendar />} />
-
-          <Route path="/" element={<Home />} />
+          <Route path="/calculator" element={<Calculator />} />
+          <Route
+                path="/"
+                element={<Navigate to="/dashboard" />}
+            />
+          <Route path="/dashboard" element={<Home />} />
         </Routes>
       </Container>
     </div>

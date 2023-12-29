@@ -14,7 +14,6 @@ const StrategyForm = () => {
       strategies_desc: "",
     },
     onSubmit: (values) => {
-      console.log(values);
       let payload = {
         token: token,
         values: values,
@@ -23,7 +22,6 @@ const StrategyForm = () => {
       if (formStatus === "add") {
         dispatch(strategyAdd(payload));
       } else if (formStatus === "edit") {
-        console.log(formData)
         payload = {
           ...payload,
           values: {

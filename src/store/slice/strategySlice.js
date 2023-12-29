@@ -12,7 +12,6 @@ export const strategyList = createAsyncThunk(
         authorization: `Bearer ${token}`,
       },
     });
-    console.log("===> I'm response", response);
     return response;
   }
 );
@@ -69,7 +68,6 @@ export const strategyRemove = createAsyncThunk(
 export const strategyUpdateFilter = createAsyncThunk(
   "strategy/strategyFilter",
   async (data) => {
-    console.log(data);
     const response = await axios.get(`${apiUrl}/strategies/${data.values}`, {
       headers: {
         "Content-Type": "application/json",

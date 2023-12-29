@@ -22,7 +22,7 @@
       // color: #a5a2b8;
       font-family: "DM Sans", sans-serif;
       font-size: 14.35px;
-      border: 1px solid #EFEFF0;
+      // border: 1px solid #EFEFF0;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
@@ -42,7 +42,7 @@
   .main-card-wrap {
     .insights-card {
       // width: 424px;
-      height: 434px;
+      // height: 434px;
       border-radius: 8px;
       // background: rgba(53, 46, 91, 1);
 
@@ -85,11 +85,13 @@
     }
 
     .card-body {
-      padding: 48px 24px 44px 41px;
+      // padding: 48px 24px 44px 41px;
       display: flex;
       justify-content: center;
       align-items: center;
+      height:525px;
     }
+    margin-bottom: 2rem;
   }
 }
 

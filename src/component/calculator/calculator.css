@@ -1,0 +1,166 @@
+.calculator {
+    padding: 0 30px;
+    width: 100%;
+}
+
+.calculator ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.calculatorHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 850px;
+}
+
+.calculator .calculatorHeaderList {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* justify-content: space-between; */
+    height: 60px;
+    border-radius: 8px;
+}
+
+.calculator .calculatorHeaderList li {
+    background: #edeff1;
+    margin: 0 0.75%;
+    height: 46px;
+    line-height: 46px;
+    text-align: center;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgb(157, 162, 166);
+    border-radius: 8px;
+    min-width: 185px;
+}
+
+.calculator .calculatorHeaderList li .active {
+    background: #0075ff;
+    border-radius: 8px;
+    color: white;
+    min-width: 185px;
+    width: -moz-fit-content;
+    width: fit-content;
+}
+
+.calculatorArea {
+    min-height: 349px;
+    max-height: fit-content;
+    min-width: 560px;
+    border: 2px solid #EFEFF0;
+    border-radius: 15px;
+    padding-bottom: 20px;
+}
+
+.positionSize {
+    height: 469px;
+}
+
+.calculatorHeading {
+    margin: 30px;
+    margin-top: 40px;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.customFieldInput {
+    /* width:72px; */
+    border-radius: 8.444px;
+    background: #F7F7F8;
+    width: 160px;
+    height: 60px;
+    font-size: 16px;
+    line-height: 19.36px;
+    box-shadow: none;
+    border: none;
+    color: #000000;
+    font-family: "DM Sans", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.inputFields {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.position-size-fields,
+.stock-average {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 60px;
+    margin-top: 30px;
+}
+
+.individual-stocks {
+    padding-right: 20px;
+    padding-top: 20px;
+}
+
+.fieldsLabel {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19.36px;
+    color: #000000;
+}
+
+.buttons-area {
+    display: flex;
+    margin: 50px 0px 0px 50px;
+    /* width:160px */
+}
+
+.calculate-button {
+    width: 115px;
+    margin-right: 20px;
+}
+
+.Result {
+    display: grid;
+    place-items: center;
+}
+
+.result-box {
+    width: 400px;
+    height: 349px;
+    /* padding:30px 20px; */
+    border: 1px solid #0075FF;
+    border-radius: 12px;
+}
+
+.result-heading {
+    background-color: #0075ff;
+    padding: 20px;
+    text-align: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+
+    p {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 700;
+        font-size: 25px;
+        color: white;
+        margin-bottom: 0px;
+    }
+}
+
+.main-result {
+    display: flex;
+    text-align: left;
+    justify-content: space-between;
+    padding: 30px 30px 0px 30px;
+    font-size: 19px;
+    font-weight: 500;
+}

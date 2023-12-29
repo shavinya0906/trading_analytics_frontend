@@ -5,7 +5,6 @@ const PreviousTradebook = ({ data }) => {
   const [tableData, setTableData] = useState(data);
 
   useEffect(() => {
-    console.log(data);
     setTableData(data);
   }, [data]);
 

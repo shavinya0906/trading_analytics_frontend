@@ -1026,7 +1026,7 @@ function TradeLog() {
                                     />
                                   </>
                                 ) : (
-                                  item?.opening_balance
+                                  item?.trade_target
                                 )}
                               </td>
                               <td>

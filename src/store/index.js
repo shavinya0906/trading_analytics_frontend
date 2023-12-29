@@ -13,6 +13,7 @@ import sessionReducer from "./slice/sessionSlice";
 import columnReducer from "./slice/newColumnSlice";
 import tradeAnalyticsSlice from "./slice/tradeAnalyticsSlice";
 import toolSlice from "./slice/toolSlice";
+import calculatorSlice from "./slice/calculatorSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   columnList: columnReducer,
   analytics: tradeAnalyticsSlice,
   tools:toolSlice,
+  calculator:calculatorSlice
 });
 
 const persistConfig = {

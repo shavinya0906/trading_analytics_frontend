@@ -76,46 +76,52 @@ const Sidebar = ({ state, setState }) => {
         <Nav className="sidebar-header ">
           <Nav.Item>
             <Nav.Link href="/trading-accounts">
-          <img src={ChartLogo} alt="Logo" />
-          {state?.collapsed ? (
-            <span className="text-light nav-items ms-2">Trading Accounts</span>
-          ) : (
-            ""
-          )}
-          </Nav.Link>
-        </Nav.Item>
+              <img src={ChartLogo} alt="Logo" />
+              {state?.collapsed ? (
+                <span className="text-light nav-items ms-2">
+                  Trading Accounts
+                </span>
+              ) : (
+                ""
+              )}
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
         <Nav className="sidebar-header">
           <Nav.Item>
             <Nav.Link href="/strategies">
-          <img src={RoundGraph} alt="Logo" />
-          {state?.collapsed ? (
-            <span className="text-light nav-items ms-2">Strategies</span>
-          ) : (
-            ""
-          )}
-          </Nav.Link>
-        </Nav.Item>
+              <img src={RoundGraph} alt="Logo" />
+              {state?.collapsed ? (
+                <span className="text-light nav-items ms-2">Strategies</span>
+              ) : (
+                ""
+              )}
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
         <Nav className="sidebar-header">
-          <img src={SidebarLogo} alt="Logo" />
-          {state?.collapsed ? (
-            <span className="text-light nav-items ms-2">Calculator</span>
-          ) : (
-            ""
-          )}
+          <Nav.Item>
+            <Nav.Link href="/calculator">
+              <img src={SidebarLogo} alt="Logo" />
+              {state?.collapsed ? (
+                <span className="text-light nav-items ms-2">Calculator</span>
+              ) : (
+                ""
+              )}
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
         <Nav className="sidebar-header">
-        <Nav.Item>
+          <Nav.Item>
             <Nav.Link href="/tools">
-          <img src={SettingLogo} alt="Logo" />
-          {state?.collapsed ? (
-            <span className="text-light nav-items ms-2">Tools</span>
-          ) : (
-            ""
-          )}
-          </Nav.Link>
-        </Nav.Item>
+              <img src={SettingLogo} alt="Logo" />
+              {state?.collapsed ? (
+                <span className="text-light nav-items ms-2">Tools</span>
+              ) : (
+                ""
+              )}
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
       </div>
     </div>

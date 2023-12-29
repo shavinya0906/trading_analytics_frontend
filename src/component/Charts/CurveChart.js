@@ -1,13 +1,31 @@
 /* App.js */
 import React, { useEffect, useState } from "react";
-import CanvasJSReact from "@canvasjs/react-charts";
-//var CanvasJSReact = require('@canvasjs/react-charts');
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
-const CanvasJS = CanvasJSReact.CanvasJS;
-const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Filler,
+  Legend
+);
+
 const CurveChart = ({ dataList }) => {
-  console.log("changed");
-  const [dataPoints, setDataPoints] = useState([]);
+  const [graphData, setGraphData] = useState([]);
 
   const sortDataBy = (data) => {
     let sortedData;
@@ -27,57 +45,38 @@ const CurveChart = ({ dataList }) => {
     // return sortedData.filter((el, i) => i !== 0);
   };
 
-  useEffect(() => {
-    if (dataList?.equityCurveData?.length) {
-      const data = sortDataBy(dataList?.equityCurveData);
-      console.log("came here againnn")
-      console.log(data);
-      setDataPoints(
-        data.map((el) => ({
-          x: new Date(el?.date.toString().slice(0, 10)),
-          y: parseInt(el?.equity),
-        }))
-      );
-    }
-    else{
-      setDataPoints([]);
-    }
-  }, [dataList]);
+  function formatDate(dateString) {
+    const options = { day: "numeric", month: "numeric", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  }
+
   const options = {
-    animationEnabled: true,
-    // title: {
-    //   text: "Monthly Sales - 2017",
-    // },
-    axisX: {
-      valueFormatString: "DD-MMM-YY",
-    },
-    // axisY: {
-    //   title: "Sales (in USD)",
-    //   prefix: "$",
-    // },
-    data: [
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+  const data = {
+    labels: graphData?.map((data) => formatDate(data.date)),
+    datasets: [
       {
-        yValueFormatString: "####",
-        xValueFormatString: "DDMM",
-        type: "area",
-        dataPoints: dataPoints,
-        // dataPoints: [
-        //   { x: new Date(2017, 0, 1), y: 1200 },
-        //   { x: new Date(2017, 0, 3), y: 1352 },
-        //   { x: new Date(2017, 0, 4), y: 1580 },
-        //   { x: new Date(2017, 0, 12), y: 2100 },
-        //   { x: new Date(2017, 0, 13), y: 2600 },
-        //   { x: new Date(2017, 0, 15), y: 2350 },
-        //   { x: new Date(2017, 0, 17), y: 2800 },
-        //   { x: new Date(2017, 0, 20), y: 3000 },
-        //   { x: new Date(2017, 0, 23), y: 3200 },
-        //   { x: new Date(2017, 0, 25), y: 3500 },
-        //   { x: new Date(2017, 0, 26), y: 3400 },
-        //   { x: new Date(2017, 0, 30), y: 2800 },
-        // ],
+        fill: true,
+        label: "PNL Value",
+        data: graphData.map((data) => data.equity),
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        pointRadius: 0.5,
+        pointHoverRadius: 4,
+        borderWidth: 1
       },
     ],
   };
-  return <CanvasJSChart options={options} />;
+
+  useEffect(() => {
+    if (dataList?.equityCurveData?.length) {
+      const data = sortDataBy(dataList?.equityCurveData);
+      setGraphData(data);
+    }
+  }, [dataList]);
+
+  return <Line options={options} data={data} />;
 };
 export default CurveChart;

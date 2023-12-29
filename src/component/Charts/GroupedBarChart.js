@@ -91,6 +91,7 @@ export function GroupedBarChart({ dataList }) {
       },
     },
     responsive: true,
+    maintainAspectRatio: false,
     interaction: {
       mode: "index",
       intersect: false,
@@ -119,6 +120,7 @@ export function GroupedBarChart({ dataList }) {
     label: strategy,
     data: [roiValues[index]],
     backgroundColor: colors[index],
+    barPercentage: 0.4,
   }));
 
   const data = {

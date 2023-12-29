@@ -7,7 +7,7 @@ export const tradeLogList = createAsyncThunk(
   "tradeLog/tradeLogList",
   async (token) => {
     var url = window.location.pathname;
-    var filename = url.substring(url.lastIndexOf("/") + 1);
+    var filename = url.substring(url.lastIndexOf("/") + 1) || 'tradelog';
     const response = await axios.get(`${apiUrl}/trade/?filename=${filename}`, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -51,7 +51,6 @@ export const tradeLogEdit = createAsyncThunk(
 export const tradeLogUpdateFilter = createAsyncThunk(
   "tradeLog/tradeLogFilter",
   async (data) => {
-    console.log(data)
     const response = await axios.get(`${apiUrl}/trade/${data.values}`, {
       headers: {
         "Content-Type": "application/json",

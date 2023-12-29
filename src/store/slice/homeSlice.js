@@ -22,7 +22,6 @@ export const getDashbordData = createAsyncThunk("auth/getDashbordData", async (t
 export const dashboardUpdateData = createAsyncThunk(
   "auth/getDashboardData",
   async (data) => {
-    console.log(data)
     const response = await axios.get(`${apiUrl}/trade/dashboard/${data.values}`, {
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +30,6 @@ export const dashboardUpdateData = createAsyncThunk(
         "Accept": "application/json"
       },
     });
-    console.log(response.data);
     return response.data;
   }
 );

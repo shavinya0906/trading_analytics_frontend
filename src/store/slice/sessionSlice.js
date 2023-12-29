@@ -12,7 +12,6 @@ export const sessionList = createAsyncThunk(
         authorization: `Bearer ${token}`,
       },
     });
-    console.log("===> I'm response", response);
     return response;
   }
 );
@@ -20,7 +19,6 @@ export const sessionList = createAsyncThunk(
 export const sessionAdd = createAsyncThunk(
   "session/sessionAdd",
   async (data) => {
-    console.log(data);
     const dataToSend={
         session_startDate:data.session_startDate,
         session_endDate:data.session_endDate,
@@ -34,7 +32,6 @@ export const sessionAdd = createAsyncThunk(
         authorization: `Bearer ${data?.token}`,
       },
     });
-    console.log(response);
     return response;
   }
 );
@@ -78,7 +75,6 @@ export const sessionRemove = createAsyncThunk(
 export const sessionUpdateFilter = createAsyncThunk(
   "session/sessionFilter",
   async (data) => {
-    console.log(data);
     const response = await axios.get(`${apiUrl}/sessions/${data.values}`, {
       headers: {
         "Content-Type": "application/json",
@@ -116,11 +112,11 @@ const sessionSlice = createSlice({
       })
       .addCase(sessionAdd.pending, (state, action) => {
         state.isLoading = true;
-        // state.isAddedOrEdited = false;
+        state.isAddedOrEdited = false;
       })
       .addCase(sessionAdd.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.isAddedOrEdited = true;
+        state.isAddedOrEdited = true;
         state.data = action?.payload?.data;
       })
       .addCase(sessionAdd.rejected, (state, action) => {
