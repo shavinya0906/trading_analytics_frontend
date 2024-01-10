@@ -53,19 +53,46 @@ const CurveChart = ({ dataList }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    plugins:{
+      legend:{
+        display:false,
+      },
+    },
+    scales: {
+      //setting a minimum bar width if data exceeds too much then bar graph should become horizontal scrollable
+      x: {
+        barThickness: 10,
+        ticks: {
+          minRotation: 90,
+          maxRotation: 90,
+          autoSkip: true,
+          maxTicksLimit: 10,
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+    },
   };
   const data = {
     labels: graphData?.map((data) => formatDate(data.date)),
     datasets: [
       {
         fill: true,
-        label: "PNL Value",
+        label: "Account Balance",
         data: graphData.map((data) => data.equity),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
-        pointRadius: 0.5,
+        pointRadius: 1.5,
         pointHoverRadius: 4,
-        borderWidth: 1
+        borderWidth: 1,
       },
     ],
   };
@@ -77,6 +104,15 @@ const CurveChart = ({ dataList }) => {
     }
   }, [dataList]);
 
-  return <Line options={options} data={data} />;
+  return (
+    <div
+      style={{
+        height: "100%",
+        width: graphData.length > 60 ? `${graphData.length * 10}px` : "",
+      }}
+    >
+      <Line options={options} data={data} />
+    </div>
+  );
 };
 export default CurveChart;

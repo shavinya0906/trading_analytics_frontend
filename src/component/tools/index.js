@@ -1,7 +1,13 @@
 import React, { useEffect, forwardRef, useState, useRef } from "react";
 import "./tools.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addCurrentTab, loadingStatus } from "../../store/slice/toolSlice";
+import {
+  addCurrentTab,
+  getUploadedTradebookFile,
+  loadingStatus,
+  uploadPreviousTradebookFile,
+  updateTradebookData,
+} from "../../store/slice/toolSlice";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import arrowDown from "./../../assets/images/arrowDown.svg";
@@ -12,16 +18,17 @@ import * as XLSX from "xlsx";
 import { sessionList, sessionAdd } from "../../store/slice/sessionSlice";
 
 const Tools = () => {
+  const [pastedData, setPastedData] = useState([]);
   const [expandedIndexes, setExpandedIndexes] = useState([]);
-
-  const toggleExpand = (index) => {
-    if (expandedIndexes.includes(index)) {
-      setExpandedIndexes(expandedIndexes.filter((i) => i !== index));
-    } else {
-      setExpandedIndexes([...expandedIndexes, index]);
-    }
-  };
+  const fileRef = useRef(null);
   const [sessions, setSessions] = useState([]);
+  const [data, setData] = useState([]);
+  const fileInputRef = useRef(null);
+  const [toolsHeadersCurrent, settoolsHeadersCurrent] = useState("Sessions");
+  const [path, setPath] = useState("tools/sessions");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const dispatch = useDispatch();
   const sessionsFormData = useRef({
     session_startDate: null,
     session_endDate: null,
@@ -32,19 +39,16 @@ const Tools = () => {
   const isAddedOrEdited = useSelector(
     (state) => state?.session?.isAddedOrEdited
   );
-
   const reduxData = useSelector((state) => state);
-  useEffect(() => {
-    dispatch(sessionList(token));
-  }, [isAddedOrEdited === true]);
-  useEffect(() => {
-    if (reduxData.session?.data.length) {
-      setSessions((prev) => reduxData.session?.data);
+
+  const toggleExpand = (index) => {
+    if (expandedIndexes.includes(index)) {
+      setExpandedIndexes(expandedIndexes.filter((i) => i !== index));
+    } else {
+      setExpandedIndexes([...expandedIndexes, index]);
     }
-  }, [reduxData]);
-  const [data, setData] = useState([]);
-  const fileInputRef = useRef(null);
-  const dispatch = useDispatch();
+  };
+
   const token = reduxData?.auth?.token;
   const [toolsHeaders, settoolsHeaders] = useState([
     { name: "Sessions", active: true, path: "tools/sessions" },
@@ -60,23 +64,38 @@ const Tools = () => {
       path: "tools/previous-tradebook",
     },
   ]);
-  const [toolsHeadersCurrent, settoolsHeadersCurrent] = useState("Sessions");
-  const [mainData, setMainData] = useState([]);
-  const [path, setPath] = useState("tools/sessions");
 
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
-  useEffect(() => {
-    if (reduxData.tools.data && reduxData.tools.currentTab == "Sessions") {
-      const data = reduxData.tools.data;
-      const blankArr = [];
-      for (const [key, value] of Object.entries(data)) {
-        blankArr.push({ name: key, value: value ? value.toFixed(2) : value });
-      }
-      setMainData((prev) => blankArr);
+  const uploadToServer = () => {
+    if (fileRef.current) {
+      dispatch(
+        uploadPreviousTradebookFile({ file: fileRef.current, token: token })
+      );
+      fileInputRef.current.value = null;
+      return;
     }
-  }, [reduxData.tools.data]);
+    if (pastedData.length > 0) {
+      const ws = XLSX.utils.json_to_sheet(pastedData, { skipHeader: true });
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
+
+      const blob = new Blob(
+        [XLSX.write(wb, { bookType: "xlsx", type: "array" })],
+        {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }
+      );
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "tradebook-file.xlsx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      const excelFile = new File([blob], "tradebook-file.xlsx", {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      dispatch(uploadPreviousTradebookFile({ file: excelFile, token: token }));
+    }
+  };
 
   const currentHeader = (position) => {
     dispatch(addCurrentTab(toolsHeaders[position].name));
@@ -96,16 +115,6 @@ const Tools = () => {
       return hold;
     });
   };
-  const ExampleCustomInput = forwardRef(
-    ({ value, onClick, placeholder }, ref) => (
-      <button className="customDateInput" onClick={onClick} ref={ref}>
-        {value ? value : placeholder}
-        <span className="arrow-icon">
-          <img src={arrowDown} alt="arrow-down" height="14px" />
-        </span>
-      </button>
-    )
-  );
 
   const handleFile = (file) => {
     const reader = new FileReader();
@@ -116,6 +125,7 @@ const Tools = () => {
       const sheet = workbook.Sheets[sheetName];
 
       const parsedData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      dispatch(updateTradebookData(parsedData));
       const header = parsedData[0];
 
       const formattedData = parsedData.map((row, index) => {
@@ -132,16 +142,30 @@ const Tools = () => {
   };
 
   const handleButtonClick = () => {
-    // Trigger file input click programmatically
     fileInputRef.current.click();
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    fileRef.current = file;
 
     if (file) {
       handleFile(file);
     }
+  };
+
+  const handlePaste = (event) => {
+    event.preventDefault();
+    const clipboardData = event.clipboardData || window.clipboardData;
+    const pastedText = clipboardData.getData("Text");
+    const newDataa = pastedText.split("\n").map((row) => row.split("\t"));
+    const newData = pastedText.split("\n").map((row) => {
+      const rowValues = row.split("\t");
+      return { values: rowValues };
+    });
+    dispatch(updateTradebookData(newDataa));
+    setPastedData(newDataa);
+    setData(newData);
   };
 
   const onSaveSession = () => {
@@ -156,12 +180,10 @@ const Tools = () => {
       (sessionsFormData.current.session_rating != "" &&
         sessionsFormData.current.session_lessonsLearned != null) ||
       sessionsFormData.current.session_lessonsLearned != ""
-    ){
+    ) {
       dispatch(sessionAdd({ ...sessionsFormData.current, token: token }));
-      // dispatch(sessionList(token));
       onResetSessionsData();
-    }
-    else {
+    } else {
       console.log("Fill all the required fields first..");
     }
   };
@@ -178,6 +200,30 @@ const Tools = () => {
     const options = { day: "numeric", month: "numeric", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   }
+
+  useEffect(() => {
+    dispatch(sessionList(token));
+    dispatch(getUploadedTradebookFile(token));
+  }, [isAddedOrEdited === true]);
+
+  useEffect(() => {
+    if (reduxData.session?.data.length) {
+      setSessions((prev) => reduxData.session?.data);
+    }
+  }, [reduxData]);
+
+  useEffect(() => {
+    if (
+      reduxData.tools.data.length > 0 &&
+      reduxData.tools.currentTab == "Previous Tradebook"
+    ) {
+      const data = reduxData.tools.data;
+      const newData = data.map((row) => {
+        return { values: row };
+      });
+      setData(newData);
+    }
+  }, [reduxData.tools.data, reduxData.tools.currentTab]);
 
   return (
     <>
@@ -221,7 +267,11 @@ const Tools = () => {
               </>
             ) : toolsHeadersCurrent == "Previous Tradebook" ? (
               <div className="buttons-section">
-                <Button variant="outline-primary" className="reset-button">
+                <Button
+                  variant="outline-primary"
+                  className="reset-button"
+                  onClick={uploadToServer}
+                >
                   Save
                 </Button>
                 <Button
@@ -422,6 +472,20 @@ const Tools = () => {
               </>
             ) : reduxData.tools.currentTab === "Previous Tradebook" ? (
               <>
+                <textarea
+                  onPaste={handlePaste}
+                  placeholder="You can import any excel file or Paste Excel data here"
+                  style={{
+                    width: "100%",
+                    resize: "none",
+                    padding: "10px",
+                    border: "1px solid #E4E4E4",
+                    borderRadius: "12px",
+                    height: "120px",
+                    textAlign: "center",
+                    lineHeight: "90px",
+                  }}
+                ></textarea>
                 <PreviousTradebook data={data} />
               </>
             ) : (
@@ -435,3 +499,14 @@ const Tools = () => {
 };
 
 export default Tools;
+
+const ExampleCustomInput = forwardRef(
+  ({ value, onClick, placeholder }, ref) => (
+    <button className="customDateInput" onClick={onClick} ref={ref}>
+      {value ? value : placeholder}
+      <span className="arrow-icon">
+        <img src={arrowDown} alt="arrow-down" height="14px" />
+      </span>
+    </button>
+  )
+);

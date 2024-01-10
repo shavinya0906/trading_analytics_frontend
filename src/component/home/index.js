@@ -52,7 +52,7 @@ const Home = () => {
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>
+              <h5>&nbsp;
                 {dataList?.karmaFactor && dataList?.karmaFactor[0]?.toFixed(2)}
               </h5>
               <h6>Karma Factor</h6>
@@ -68,25 +68,25 @@ const Home = () => {
         <div className="dash-row mt-5">
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.winPercentage?.toFixed(2)}%</h5>
+              <h5>&nbsp;{dataList?.winPercentage?.toFixed(2)}%</h5>
               <h6>Win %</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.RRratio?.toFixed(2)}</h5>
+              <h5>&nbsp;{dataList?.RRratio?.toFixed(2)}</h5>
               <h6>R:R ratio</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.avgWinningTrade?.toFixed(2)}</h5>
+              <h5>&nbsp;{dataList?.avgWinningTrade?.toFixed(2)}</h5>
               <h6>Average winning trade</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>{dataList?.avgLosingTrade?.toFixed(2)}</h5>
+              <h5>&nbsp;{dataList?.avgLosingTrade?.toFixed(2)}</h5>
               <h6>Average losing trade</h6>
             </div>
           </div>
@@ -96,7 +96,10 @@ const Home = () => {
           <div className="col-md-6 col-12 ">
             <div className="insights-card chat-card list-box">
               <h6>Insights</h6>
-              <ul id="arrow-list">
+              <ul
+                id="arrow-list"
+                style={{ overflowY: "auto", height: "400px" }}
+              >
                 <li>
                   {dataList?.netPNL?.toFixed(2)
                     ? insightsData[0]
@@ -138,13 +141,15 @@ const Home = () => {
                     dataList?.totalTradeCharges >=
                       0.8 * dataList?.openingBalance) ||
                   (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
-                    dataList?.totalTradeCharges >= 0.8 * dataList?.openingBalance)
+                    dataList?.totalTradeCharges >=
+                      0.8 * dataList?.openingBalance)
                     ? insightsData[12]
                     : (!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
                         dataList?.totalTradeCharges <
                           0.8 * dataList?.openingBalance) ||
                       (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
-                        dataList?.totalTradeCharges < 0.8 * dataList?.openingBalance)
+                        dataList?.totalTradeCharges <
+                          0.8 * dataList?.openingBalance)
                     ? insightsData[13]
                     : insightsData[14]}
                   {/* It is a long established fact that a reader will be distracted*/}
@@ -154,17 +159,61 @@ const Home = () => {
                     dataList?.totalTradePenalties >=
                       0.2 * dataList?.openingBalance) ||
                   (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
-                    dataList?.totalTradePenalties >= 0.2 * dataList?.openingBalance)
+                    dataList?.totalTradePenalties >=
+                      0.2 * dataList?.openingBalance)
                     ? insightsData[15]
                     : (!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
                         dataList?.totalTradePenalties <
                           0.2 * dataList?.openingBalance) ||
                       (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
-                        dataList?.totalTradePenalties < 0.2 * dataList?.openingBalance)
+                        dataList?.totalTradePenalties <
+                          0.2 * dataList?.openingBalance)
                     ? insightsData[16]
                     : insightsData[17]}
                   {/* It is a long established fact that a reader will be distracted*/}
                 </li>
+                {dataList?.convictionType === "Low" && dataList?.netPNL < 0 ? (
+                  <li> {insightsData[18]}</li>
+                ) : dataList?.convictionType === "Medium" &&
+                  dataList?.netPNL < 0 ? (
+                  <li> {insightsData[19]}</li>
+                ) : (
+                  dataList?.convictionType === "High" &&
+                  dataList?.netPNL < 0 && <li>{insightsData[20]}</li>
+                )}
+                <li>
+                  {dataList?.topFivePercentAccountLessThanZero
+                    ? insightsData[21]
+                    : insightsData[22]}
+                  {/* It is a long established fact that a reader will be distracted*/}
+                </li>
+                {(!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                  dataList?.totalSlippage >= 1 * dataList?.openingBalance) ||
+                (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                  dataList?.totalSlippage >= 1 * dataList?.openingBalance) ? (
+                  <li>{insightsData[23]}</li>
+                ) : (
+                  (!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.totalSlippage < 1 * dataList?.openingBalance) ||
+                  (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.totalSlippage < 1 * dataList?.openingBalance && (
+                      <li>{insightsData[24]}</li>
+                    ))
+                )}
+                {(!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                  dataList?.isNetROI3Percent) ||
+                (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                  dataList?.isNetROI3Percent) ? (
+                  <li>{insightsData[25]}</li>
+                ) : (
+                  (!isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    !dataList?.isNetROI3Percent) ||
+                  (isOneMonthGap(dataList?.startDate, dataList?.endDate) &&
+                    dataList?.isNetROI3Percent && <li>{insightsData[26]}</li>)
+                )}
+                {dataList?.maxConsecutiveLosses >= 10 && (
+                  <li>{insightsData[27]}</li>
+                )}
               </ul>
             </div>
           </div>

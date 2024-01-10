@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
-export function GroupedBarChart({ dataList }) {
+export function SplittedBarGraph({ dataList, xAxis }) {
   const [strategyROI, setStrategyROI] = useState({});
 
   useEffect(() => {
-    if (dataList?.strategyGraph) {
-      const strategies = structuredClone(dataList?.strategyGraph);
+    if (dataList) {
+      const strategies = structuredClone(dataList);
       setStrategyROI(strategies);
     }
   }, [dataList]);
@@ -14,8 +14,7 @@ export function GroupedBarChart({ dataList }) {
   const options = {
     plugins: {
       title: {
-        display: true,
-        text: "Strategy Wise Net Rate of Interest",
+        display: false,
       },
     },
     scales: {
@@ -25,7 +24,7 @@ export function GroupedBarChart({ dataList }) {
         },
         title: {
           display: true,
-          text: "Month",
+          text: xAxis,
         },
       },
       y: {
@@ -34,7 +33,7 @@ export function GroupedBarChart({ dataList }) {
         },
         title: {
           display: true,
-          text: "ROI",
+          text: "No. of trades",
         },
       },
     },
@@ -47,8 +46,9 @@ export function GroupedBarChart({ dataList }) {
   };
 
   const datasets = Object.values(strategyROI).map((strategyData) => {
-    // Filter out data points where y is 0
-    const filteredData = strategyData.data.filter((dataPoint) => dataPoint.y !== 0);
+    const filteredData = strategyData.data.filter(
+      (dataPoint) => dataPoint.y !== null && dataPoint.y !== 0
+    );
 
     return {
       ...strategyData,
@@ -60,5 +60,5 @@ export function GroupedBarChart({ dataList }) {
     datasets,
   };
 
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={data} height={390} />;
 }

@@ -42,7 +42,7 @@
   .main-card-wrap {
     .insights-card {
       // width: 424px;
-      // height: 434px;
+      height: 528px;
       border-radius: 8px;
       // background: rgba(53, 46, 91, 1);
 
@@ -69,11 +69,26 @@
           font-weight: 500;
           line-height: 174.2%;
         }
+
+      }
+    
+      #arrow-list::-webkit-scrollbar {
+        width: 6px; /* Set the width of the scrollbar */
+      }
+    
+      #arrow-list::-webkit-scrollbar-thumb {
+        background-color: #6863f3;
+        border-radius: 6px;
+      }
+    
+      #arrow-list::-webkit-scrollbar-track {
+        background-color: #f1f1f1; /* Set the color of the track */
       }
     }
   }
 
   .chat-card {
+    
     .card-header {
       padding: 16px 24px;
     }
@@ -85,12 +100,23 @@
     }
 
     .card-body {
-      // padding: 48px 24px 44px 41px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height:525px;
+      height:450px;
+      overflow-x: auto;
     }
+    ::-webkit-scrollbar {
+      width: 6px; /* Set the width of the scrollbar */
+      height:5px;
+    }
+  
+    ::-webkit-scrollbar-thumb {
+      background-color: #6863f3;
+      border-radius: 6px;
+    }
+  
+    ::-webkit-scrollbar-track {
+      background-color: #f1f1f1; /* Set the color of the track */
+    }
+    
     margin-bottom: 2rem;
   }
 }

@@ -20,7 +20,7 @@ const DashboardRouter = ({ state }) => {
       <Container fluid className="content p-0">
         <Header />
         <Routes>
-          <Route path="/tradelog" element={<TradeLog />} />
+          <Route path="/tradelog/:starttDate?/:enddDate?" element={<TradeLog />} />
           <Route path="/strategies" element={<Strategies />} />
           <Route path="/trading-accounts" element={<TradingAccounts />} />
           <Route path="/trader-analytics" element={<TradeAnalytics />} />

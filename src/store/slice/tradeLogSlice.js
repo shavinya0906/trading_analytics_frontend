@@ -5,15 +5,16 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export const tradeLogList = createAsyncThunk(
   "tradeLog/tradeLogList",
-  async (token) => {
+  async (data) => {
     var url = window.location.pathname;
     var filename = url.substring(url.lastIndexOf("/") + 1) || 'tradelog';
-    const response = await axios.get(`${apiUrl}/trade/?filename=${filename}`, {
+    const response = await axios.get(`${apiUrl}/trade/?filename=${filename}`+`${data.payloadUrl}`, {
       headers: {
         "Content-Type": "multipart/form-data",
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${data.token}`,
       },
     });
+    console.log(response);
     return response;
   }
 );
@@ -25,7 +26,9 @@ export const tradeLogAdd = createAsyncThunk(
     if (!data?.values.trade_target) {
       data.values.trade_target = 0;
     }
-    const response = await axios.post(`${apiUrl}/trade`, data?.values, {
+    var url = window.location.pathname;
+    var filename = url.substring(url.lastIndexOf("/") + 1) || 'tradelog';
+    const response = await axios.post(`${apiUrl}/trade/?filename=${filename}`, data?.values, {
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${data?.token}`,
@@ -54,7 +57,7 @@ export const tradeLogUpdateFilter = createAsyncThunk(
     const response = await axios.get(`${apiUrl}/trade/${data.values}`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${data?.toke}`,
+        "Authorization": `Bearer ${data?.token}`,
       },
     });
     return response;

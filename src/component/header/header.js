@@ -16,10 +16,13 @@ import {
   calenderStart,
   tradeLogUpdateFilter,
 } from "../../store/slice/tradeLogSlice";
+import { updateTradeAnalyticsData } from "../../store/slice/tradeAnalyticsSlice";
 import { dashboardUpdateData } from "../../store/slice/homeSlice";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const Header = () => {
+  const { starttDate, enddDate } = useParams();
+
   const dispatch = useDispatch();
   const logout = () => {
     localStorage.clear();
@@ -40,7 +43,7 @@ const Header = () => {
   const token = reduxData?.auth?.token;
 
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
+  const [endddDate, setEndDate] = useState(null);
   const converter = (data) => {
     return data.join(",");
   };
@@ -72,6 +75,7 @@ const Header = () => {
   const holding = converter(reduxData.trades.filterData[1].selected);
   const tradeAcc = converter(reduxData.trades.filterData[3].selected);
   const strag = converter(reduxData.trades.filterData[4].selected);
+  const navigate = useNavigate();
 
   const monthRange = currentMonthRange(new Date());
   const oldStart = monthRange.starting.toISOString().substring(0, 10);
@@ -82,28 +86,43 @@ const Header = () => {
   const currentEnd =
     reduxData.trades?.end && currentMonthRangeNew(reduxData.trades?.end);
 
-  const sumitFilterData = () => {
+  const updateDashboardData = () => {
     const startDate = currentStart || oldStart;
     const endDate = currentEnd || oldEnd;
-
-    let makePayload = `?assetClass=${asset}&conviction=${conv}&strategyUsed=${strag}&minPnL=100&maxPnl=400&holdingTradeType=${holding}&tradingAccount=${tradeAcc}&startDate=${startDate}&endDate=${endDate}`;
     let dashboardPayloadUrl = `?startDate=${startDate}&endDate=${endDate}`;
-    dispatch(tradeLogUpdateFilter({ toke: token, values: makePayload }));
     dispatch(
       dashboardUpdateData({ token: token, values: dashboardPayloadUrl })
     );
   };
 
+  const updateTradeAnalyticsDataa = () => {
+    const startDate = currentStart || oldStart;
+    const endDate = currentEnd || oldEnd;
+    let payloadUrl = `?startDate=${startDate}&endDate=${endDate}`;
+    dispatch(updateTradeAnalyticsData({ token: token, values: payloadUrl }));
+  };
+
+  // const updateTradelogData = () => {
+  //   const startDate = currentStart || oldStart;
+  //   const endDate = currentEnd || oldEnd;
+  //   let payloadUrl = `?startDate=${startDate}&endDate=${endDate}&asset=${asset}&holding=${holding}&strategy=${strag}&tradeAccount=${tradeAcc}&conviction=${conv}`;
+  //   dispatch(tradeLogUpdateFilter({ token: token, values: payloadUrl }));
+  // };
+
   useEffect(() => {
     var url = window.location.pathname;
-    var filename = url.substring(url.lastIndexOf("/") + 1);
-    if (filename == "tradelog" || filename == "dashboard") {
-      endDate && sumitFilterData();
-    } else if (filename == "trader-analytics") {
+    var filename = url.split("/")[1];
+    if (filename == "tradelog" || (starttDate && enddDate)) {
       const startDate = currentStart || oldStart;
       const endDate = currentEnd || oldEnd;
+      let payurl = `${startDate}/${endDate}`;
+      endddDate && navigate(`/tradelog/${payurl}`);
+    } else if (filename == "dashboard") {
+      endddDate && updateDashboardData();
+    } else if (filename == "trader-analytics") {
+      endddDate && updateTradeAnalyticsDataa();
     }
-  }, [endDate]);
+  }, [endddDate]);
 
   const onChange = (dates) => {
     const [start, end] = dates;
@@ -142,7 +161,7 @@ const Header = () => {
               onChange={onChange}
               customInput={<ExampleCustomInput />}
               startDate={startDate}
-              endDate={endDate}
+              endDate={endddDate}
               selectsRange
             />
             <div

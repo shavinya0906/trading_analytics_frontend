@@ -6,9 +6,8 @@ import {
   loadingStatus,
   tradeAnalyticsData,
 } from "../../store/slice/tradeAnalyticsSlice";
-import Graph from "./Graphics";
-import moment from "moment";
-import TradeAnalyticsTab from "./TradeAnalyticsTab";
+import TradeAnalyticsTab from "./components/TradeAnalyticsTab";
+import AdvancedGraph from "./components/AdvancedGraph";
 
 const TradeAnalytics = () => {
   const dispatch = useDispatch();
@@ -61,12 +60,6 @@ const TradeAnalytics = () => {
     return formatDate;
   };
 
-  const asset = converter(reduxData.trades.filterData[0].selected);
-  const conv = converter(reduxData.trades.filterData[2].selected);
-  const holding = converter(reduxData.trades.filterData[1].selected);
-  const tradeAcc = converter(reduxData.trades.filterData[3].selected);
-  const strag = converter(reduxData.trades.filterData[4].selected);
-
   const monthRange = currentMonthRange(new Date());
   const oldStart = monthRange.starting.toISOString().substring(0, 10);
   const oldEnd = monthRange.ending.toISOString().substring(0, 10);
@@ -78,22 +71,22 @@ const TradeAnalytics = () => {
   const startDate = currentStart || oldStart;
   const endDate = currentEnd || oldEnd;
 
-  let currentMon =
-    reduxData.analytics.monthsName[moment(startDate).format("M")];
+  let currentMon = new Date().getMonth;
+  // reduxData.analytics.monthsName[moment(startDate).format("M")];
 
-  currentMon = currentMon.slice(0, 3) + " " + moment(startDate).format("YYYY");
+  // currentMon = currentMon.slice(0, 3) + " " + moment(startDate).format("YYYY");
 
-  useEffect(() => {
-    if (startDate && endDate) {
-      dispatch(
-        tradeAnalyticsData({
-          token,
-          data: [startDate, endDate],
-          path,
-        })
-      );
-    }
-  }, [reduxData.trades.end, path]);
+  // useEffect(() => {
+  //   if (startDate && endDate) {
+  //     dispatch(
+  //       tradeAnalyticsData({
+  //         token,
+  //         data: [startDate, endDate],
+  //         path,
+  //       })
+  //     );
+  //   }
+  // }, [reduxData.trades.end, path]);
 
   useEffect(() => {
     if (
@@ -103,11 +96,27 @@ const TradeAnalytics = () => {
       const data = reduxData.analytics.data;
       const blankArr = [];
       for (const [key, value] of Object.entries(data)) {
-        blankArr.push({ name: key, value: value ? value.toFixed(2) : value });
+        //if key is graphs don't push anything to blankArr
+        if (key == "graphs") {
+          continue;
+        }
+        //if value is a number then toFixed(2)
+        if (typeof value == "number") {
+          blankArr.push({ name: key, value: value.toFixed(2) });
+        } else blankArr.push({ name: key, value: value });
       }
       setMainData((prev) => blankArr);
     }
   }, [reduxData.analytics.data]);
+
+  useEffect(() => {
+    dispatch(loadingStatus(true));
+    dispatch(
+      tradeAnalyticsData({
+        token,
+      })
+    );
+  }, []);
 
   const currentHeader = (position) => {
     dispatch(addCurrentTab(tradeHeaders[position].name));
@@ -127,6 +136,18 @@ const TradeAnalytics = () => {
       return hold;
     });
   };
+
+  function camelCaseToSpaceSeparated(camelCaseString) {
+    // Use a regular expression to insert a space before each capital letter
+    return (
+      camelCaseString
+        .replace(/([A-Z])/g, " $1")
+        // Capitalize the first letter
+        .replace(/^./, function (str) {
+          return str.toUpperCase();
+        })
+    );
+  }
 
   return (
     <>
@@ -166,9 +187,11 @@ const TradeAnalytics = () => {
                     <p className="ammount">
                       $
                       {reduxData.analytics.data["bestMonth"] &&
-                        reduxData.analytics.data["bestMonth"].toFixed(2)}
+                        reduxData.analytics.data.bestMonthPnl.toFixed(2)}
                     </p>
-                    <p className="fiscal">in {currentMon}</p>
+                    <p className="fiscal">
+                      in {reduxData.analytics.data.bestMonth}
+                    </p>
                   </div>
                 </li>
                 <li>
@@ -176,23 +199,23 @@ const TradeAnalytics = () => {
                     <h3>Lowest Month</h3>
                     <p className="ammount">
                       $
-                      {reduxData.analytics.data["lowestMonth"] &&
-                        reduxData.analytics.data["lowestMonth"].toFixed(2)}
+                      {reduxData.analytics.data["worstMonth"] &&
+                        reduxData.analytics.data.worstMonthPnl.toFixed(2)}
                     </p>
-                    <p className="fiscal">in Jan 2023</p>
+                    <p className="fiscal">
+                      in {reduxData.analytics.data.worstMonth}
+                    </p>
                   </div>
                 </li>
                 <li>
                   <div className="analyticsBox">
-                    <h3>Average</h3>
+                    <h3>Average PNL</h3>
                     <p className="ammount">
                       $
-                      {reduxData.analytics.data["averageMonthlyPnL"] &&
-                        reduxData.analytics.data["averageMonthlyPnL"].toFixed(
-                          2
-                        )}
+                      {reduxData.analytics.data["avgMonthPnl"] &&
+                        reduxData.analytics.data.avgMonthPnl.toFixed(2)}
                     </p>
-                    <p className="fiscal">in Jan 2023</p>
+                    <p className="fiscal">per month</p>
                   </div>
                 </li>
               </ul>
@@ -207,14 +230,41 @@ const TradeAnalytics = () => {
                   mainData.map((item, i) => {
                     return (
                       <li key={i}>
-                        <span>{item.name}</span>
-                        <span>&#8377;{item.value}</span>
+                        <span>{camelCaseToSpaceSeparated(item.name)}</span>
+                        <span>
+                          {/* &#8377; */}
+                          {item.value}
+                        </span>
                       </li>
                     );
                   })}
               </ul>
-            ) : !reduxData.analytics.isLoading ? (
-              <TradeAnalyticsTab />
+            ) : tradeHeadersCurrent == "Trade Analytics" ? (
+              <TradeAnalyticsTab
+                data={reduxData.analytics.data.graphs.tradeAnalysisGraphs}
+              />
+            ) : tradeHeadersCurrent == "Performance Analysis" ? (
+              <TradeAnalyticsTab
+                data={
+                  reduxData.analytics.data.graphs.performanceAnalysisGraphsData
+                }
+              />
+            ) : tradeHeadersCurrent == "Effort Analysis" ? (
+              <TradeAnalyticsTab
+                data={reduxData.analytics.data.graphs.effortAnalysisGraphsData}
+              />
+            ) : tradeHeadersCurrent == "Return Analysis" ? (
+              <TradeAnalyticsTab
+                data={reduxData.analytics.data.graphs.roiAnalysisGraphs}
+              />
+            ) : tradeHeadersCurrent == "Drawdown Analysis" ? (
+              <TradeAnalyticsTab
+                data={
+                  reduxData.analytics.data.graphs.drawDownAnalysisGraphsData
+                }
+              />
+            ) : tradeHeadersCurrent == "Advanced" ? (
+              <AdvancedGraph />
             ) : (
               ""
             )}

@@ -8,8 +8,8 @@
 .analytics .tradingAnalyticsHeaderList {
   display: flex;
   align-items: center;
-  width: 100%;
-  justify-content: space-between;
+  min-width:900px;
+  justify-content: space-around;
   background: #edeff1;
   height: 60px;
   border-radius: 8px;
@@ -17,7 +17,6 @@
 .analytics .tradingAnalyticsHeaderList li {
   height: 46px;
   line-height: 46px;
-  width: 14.2857142857%;
   text-align: center;
   white-space: nowrap;
   display: flex;
@@ -45,6 +44,7 @@
 }
 .tradingAnalyticsBodyUl li {
   width: 49%;
+  min-width:290px;
   height: 50px;
   line-height: 48px;
   display: flex;
