@@ -7,13 +7,16 @@ export const tradeLogList = createAsyncThunk(
   "tradeLog/tradeLogList",
   async (data) => {
     var url = window.location.pathname;
-    var filename = url.substring(url.lastIndexOf("/") + 1) || 'tradelog';
-    const response = await axios.get(`${apiUrl}/trade/?filename=${filename}`+`${data.payloadUrl}`, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: `Bearer ${data.token}`,
-      },
-    });
+    var filename = url.substring(url.lastIndexOf("/") + 1) || "tradelog";
+    const response = await axios.get(
+      `${apiUrl}/trade/?filename=${filename}` + `${data.payloadUrl}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${data.token}`,
+        },
+      }
+    );
     console.log(response);
     return response;
   }
@@ -22,18 +25,21 @@ export const tradeLogList = createAsyncThunk(
 export const tradeLogAdd = createAsyncThunk(
   "tradeLog/tradeLogAdd",
   async (data) => {
-    
     if (!data?.values.trade_target) {
       data.values.trade_target = 0;
     }
     var url = window.location.pathname;
-    var filename = url.substring(url.lastIndexOf("/") + 1) || 'tradelog';
-    const response = await axios.post(`${apiUrl}/trade/?filename=${filename}`, data?.values, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${data?.token}`,
-      },
-    });
+    var filename = url.substring(url.lastIndexOf("/") + 1) || "tradelog";
+    const response = await axios.post(
+      `${apiUrl}/trade/?filename=${filename}`,
+      data?.values,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${data?.token}`,
+        },
+      }
+    );
     return response;
   }
 );
@@ -57,10 +63,46 @@ export const tradeLogUpdateFilter = createAsyncThunk(
     const response = await axios.get(`${apiUrl}/trade/${data.values}`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${data?.token}`,
+        Authorization: `Bearer ${data?.token}`,
       },
     });
     return response;
+  }
+);
+
+export const updateTrade = createAsyncThunk(
+  "tradeLog/updateTrade",
+  async (data) => {
+    const { questionnaireId, answers, token } = data;
+
+    const response = await axios.put(
+      `${apiUrl}/trade/update/${questionnaireId}`,
+      answers,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  }
+);
+
+export const getTradeById = createAsyncThunk(
+  "tradeLog/getTradeById",
+  async ({ id, token }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/trade/trade/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response; // Assuming the trade data is in the response's data property
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
@@ -73,12 +115,13 @@ const tradeLogSlice = createSlice({
     isLoading: false,
     start: "",
     end: "",
+    selectedTrade: {},
     filterData: [
       {
         name: "Asset Class",
         data: [
           "Equity",
-          "Futures",
+          "Features",
           "Options",
           "Currency",
           "Commodity",
@@ -86,7 +129,6 @@ const tradeLogSlice = createSlice({
         ],
         active: true,
         path: "asset",
-        // selected: ["Equity"],
         selected: [],
       },
       {
@@ -116,7 +158,7 @@ const tradeLogSlice = createSlice({
 
       {
         name: "Trading account",
-        data: ["Strategy 1", "Strategy 2"],
+        data: ["Account A", "Account B"],
         active: false,
         path: "tradeAccount",
         // selected: ["Strategy 1"],
@@ -124,7 +166,7 @@ const tradeLogSlice = createSlice({
       },
       {
         name: "Strategy used",
-        data: ["Account A", "Account B"],
+        data: ["Strategy 1", "Strategy 2"],
         active: false,
         path: "strategyUsed",
         selected: [],
@@ -195,7 +237,24 @@ const tradeLogSlice = createSlice({
       .addCase(tradeLogEdit.rejected, (state, action) => {
         state.isLoading = false;
         state.isAddedOrEdited = false;
-      });
+      })
+      //adding for getTradeByID
+      .addCase(getTradeById.pending, (state, action) => {
+        // const tradeId = action.meta.arg;
+        state.isLoading = true;
+        state.isAddedOrEdited = false;
+        // state.selectedTrade = { ...initialSelectedTradeState };
+        // state.selectedTrade.isLoading = true;
+        // state.selectedIndex = tradeId;
+      })
+      .addCase(getTradeById.fulfilled, (state, action) => {
+        state.selectedTrade = action.payload?.data;
+        state.selectedTrade.isLoading = false;
+      })
+      .addCase(getTradeById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isAddedOrEdited = false;
+      })
   },
 });
 export const { calenderStart, calenderEnd, newFilterData } =

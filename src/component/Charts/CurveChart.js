@@ -59,7 +59,6 @@ const CurveChart = ({ dataList }) => {
       },
     },
     scales: {
-      //setting a minimum bar width if data exceeds too much then bar graph should become horizontal scrollable
       x: {
         barThickness: 10,
         ticks: {

@@ -9,6 +9,7 @@ import TradeAnalytics from "../component/TradingAnalytics";
 import Tools from "../component/tools"
 import Calendar from "../component/calendar";
 import Calculator from "../component/calculator";
+import Mantra from "../component/mantra";
 
 const DashboardRouter = ({ state }) => {
   return (
@@ -27,6 +28,7 @@ const DashboardRouter = ({ state }) => {
           <Route path="/tools" element={<Tools />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/calculator" element={<Calculator />} />
+          <Route path="/mantra" element={<Mantra />} />
           <Route
                 path="/"
                 element={<Navigate to="/dashboard" />}

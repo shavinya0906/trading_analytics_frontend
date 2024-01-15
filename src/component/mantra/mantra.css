@@ -1,0 +1,116 @@
+.heading-mantra {
+  color: var(--Lite-Font, #1B1B1B);
+  font-family: DM Sans;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  padding: 0.5rem 1rem;
+}
+
+.mantra-description {
+  width: 1100px;
+  height: 180px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(0, 117, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%);
+  padding: 40px 40px 70px 40px;
+}
+
+.mantra-text {
+  color: #000;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 35px;
+  /* 194.444% */
+}
+
+.inverted-comma {
+  margin-left: auto;
+}
+
+.mantra-box {
+  width: 95%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  font-family: 'Inter';
+}
+
+.add-btn {
+  width: 10rem;
+  padding: 1rem 2rem;
+  display: flex;
+  margin-left: auto;
+  border-radius: 10px;
+  color: white;
+  background: #0075FF;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.more {
+  position: relative;
+  z-index: 1;
+}
+
+.mantra-card {
+  background-color: #fff6fb;
+  border-radius: 15px;
+  padding: 2rem 1.8rem;
+  width: 30%;
+  margin: 1rem;
+
+  h4 {
+    font-size: 1rem;
+    line-height: 1.8rem;
+  }
+
+  p {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.more-vert {
+  position: absolute;
+  right: 1.5rem;
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.more-menu {
+  background-color: white;
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  p {
+    &:nth-child(1) {
+      border-bottom: 1px solid grey;
+    }
+
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    color: grey;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 0;
+    transition: 0.2s all ease;
+
+    &:hover {
+      background-color: #7a7a7c;
+      color: white;
+    }
+  }
+}

@@ -176,7 +176,9 @@ const Header = () => {
                 <img src={calander} alt="plus" className="plus-icon" />
               </Button>
             </Link>
-            <Button variant="outline-primary" className="outline-button-man">
+            <Button variant="outline-primary" className="outline-button-man" onClick={()=>{
+              navigate('/mantra');
+            }}>
               Mantra
               <img src={handMoney} alt="plus" className="plus-icon" />
             </Button>

@@ -62,7 +62,7 @@ const columnSlice = createSlice({
         state.isLoading = true;
       }
     ).addCase(createColumnData.fulfilled, (state, action) => {
-      state.data = action.payload;
+      state.data = [...state.data,action.payload];
       state.isLoading = false;
     }
   ).addCase(createColumnData.rejected, (state, action) => {

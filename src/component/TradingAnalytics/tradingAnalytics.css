@@ -110,3 +110,37 @@
   display: flex;
   justify-content: center;
 }/*# sourceMappingURL=tradingAnalytics.css.map */
+
+.advanced-graph-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: auto;
+}
+
+.graph-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.axis-dropdown {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.chart-container {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 20px;
+}

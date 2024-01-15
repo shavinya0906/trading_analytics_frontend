@@ -29,6 +29,9 @@ import { tradingAccountList } from "../../store/slice/tradingAccountsSlice";
 import { CSVLink } from "react-csv";
 import NoTradeData from "./../../assets/images/noTradeLogData.svg";
 import { useParams } from "react-router-dom";
+import Pagination from "./Pagination";
+import DailyQuestionnaire from "./DailyQuestionnaire";
+import { getTradeById, updateTrade } from "../../store/slice/tradeLogSlice";
 
 const tableHeading = [
   "Date",
@@ -55,8 +58,6 @@ const tableHeading = [
   "Trading account",
   "Opening Balance",
   "Image",
-  // "Daily questionnaire",
-  // "Trade Customizable",
 ];
 
 const tableHeadingObj = {
@@ -102,18 +103,19 @@ function TradeLog() {
   const { start, end } = useSelector((state) => state?.trades);
   useEffect(() => {
     if (end) {
-      setTradeList(() =>
-        reduxData.length>0 && reduxData?.filter(
-          (el) =>
-            new Date(start) < new Date(el?.trade_date) &&
-            new Date(end) > new Date(el?.trade_date)
-        )
+      setTradeList(
+        () =>
+          reduxData.length > 0 &&
+          reduxData?.filter(
+            (el) =>
+              new Date(start) < new Date(el?.trade_date) &&
+              new Date(end) > new Date(el?.trade_date)
+          )
       );
-      console.log("===> this is the date filter", start, end, reduxData[0]);
     } else {
-      setTradeList((prev) => reduxData);
+      setTradeList((prev) => reduxData.data);
     }
-  }, [end,reduxData]);
+  }, [end, reduxData]);
   async function getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -196,7 +198,7 @@ function TradeLog() {
     trade_karma: Yup.string(),
     trade_date: Yup.string().required("Required"),
     holding_trade_type: Yup.string(),
-    // trade_charges: Yup.number(),
+    trade_charges: Yup.number().required("Required"),
     trading_account: Yup.string(),
     stop_loss: Yup.string(),
     // trade_target: Yup.string(),
@@ -206,12 +208,46 @@ function TradeLog() {
     reason_for_trade: Yup.string(),
     percentage_of_account_risked: Yup.number(),
     trade_slippage: Yup.number(),
-    trade_penalties: Yup.number(),
+    trade_penalties: Yup.number().required("Required"),
     net_roi: Yup.number(),
     trade_customizable: Yup.string(),
-    opening_balance: Yup.number().required("Required"),
+    opening_balance: Yup.number().when("trade_date", {
+      is: (tradeDate) => {
+        return tradeList.length === 0;
+      },
+      then: Yup.number().required("Required"),
+      otherwise: Yup.number().transform((value, originalObject) => {
+        if (!value) {
+          return calculateOpeningBalance(originalObject);
+        }
+        return value;
+      }),
+    }),
     comment: Yup.string(),
   });
+  function calculateOpeningBalance(originalObject) {
+    //Opening balance = prev opening balance +pnl - charges - penalties
+    const pnl = originalObject?.trade_pnl;
+    const charges = originalObject?.trade_charges;
+    const penalties = originalObject?.trade_penalties;
+    let newOpeningBalance = reduxData.lastAddedTradeOpeningBalance;
+    console.log(newOpeningBalance);
+    if (pnl) {
+      newOpeningBalance += pnl;
+      console.log(newOpeningBalance);
+    }
+    if (charges) {
+      newOpeningBalance -= charges;
+      console.log(newOpeningBalance);
+    }
+    if (penalties) {
+      newOpeningBalance -= penalties;
+      console.log(newOpeningBalance);
+    }
+    const calculatedBalance = newOpeningBalance;
+    console.log(newOpeningBalance);
+    return calculatedBalance;
+  }
 
   function filterEmptyValues(obj) {
     const filteredObject = {};
@@ -226,20 +262,15 @@ function TradeLog() {
   }
 
   const handleAddSubmit = async (values, { resetForm }) => {
+    console.log(values);
     for (const obj of columnDetail) {
-      if (values.hasOwnProperty(obj.column_name)) {
-        // dispatch(createColumnData({token:token,data:obj.column_name}));
-        const newObject = {
-          key: obj.id,
-          value: values[obj.column_name],
-        };
-        values.dynamicColumn = [...values.dynamicColumn, newObject];
-        delete values[obj.column_name];
-      } else {
-        console.log(
-          "Key not found in the first array for column_name: " + obj.column_name
-        );
-      }
+      // dispatch(createColumnData({token:token,data:obj.column_name}));
+      const newObject = {
+        key: obj.id,
+        value: values[obj.column_name] || "",
+      };
+      values.dynamicColumn = [...values.dynamicColumn, newObject];
+      delete values[obj.column_name];
     }
     delete values.dynamicColumnsField;
     values.trade_date = moment(values?.trade_date).format("yyyy-MM-DD");
@@ -266,9 +297,15 @@ function TradeLog() {
 
   const handleEditSubmit = () => {
     const customId = [...new Set(allIds)];
-    const holdTrade = tradeList.filter((item) => {
-      delete item.createdAt;
-      return item;
+    const holdTrade = tradeList.map((item) => {
+      const tradeCopy = { ...item };
+      delete tradeCopy.createdAt;
+      delete tradeCopy.user_id;
+      delete tradeCopy.id;
+      return {
+        id: item.id,
+        data: tradeCopy,
+      };
     });
     const allVal = holdTrade.filter((item, i) => customId.includes(i));
     const payload = {
@@ -276,14 +313,29 @@ function TradeLog() {
       values: allVal,
     };
     dispatch(tradeLogEdit(payload));
+    setId("");
     setEdit(false);
   };
 
-  const handlesSubmit = () => {
-    console.log(formikRef.current);
+  // const handleEditSubmitSingleTrade = async (values) => {
+  //   try {
+  //     const payload = {
+  //       questionnaireId: id,
+  //       answers: values,
+  //       token: token,
+  //     };
+  //     const response = await dispatch(updateTrade(payload));
+  //     console.log("Trade updated successfully:", response);
+  //   } catch (error) {
+  //     console.error("Error updating trade:", error);
+  //   } finally {
+  //     setId("");
+  //   }
+  // };
 
+  const handlesSubmit = () => {
     if (formikRef?.current) {
-      // handleEditSubmit(formikRef?.current?.values);
+      // handleEditSubmitSingleTrade(formikRef?.current?.values);
     }
   };
 
@@ -310,6 +362,7 @@ function TradeLog() {
     }
 
     console.log(result);
+
     return result;
   }
 
@@ -327,8 +380,12 @@ function TradeLog() {
     setAllIds((prev) => [...prev, id]);
     setTradeList((prev) => {
       const hold = JSON.parse(JSON.stringify(prev)).map((item, i) => {
-        if (i == id) {
-          item[field] = value;
+        if (i === id) {
+          if (typeof item[field] === "number") {
+            item[field] = parseFloat(value);
+          } else {
+            item[field] = value;
+          }
         }
         return item;
       });
@@ -337,6 +394,7 @@ function TradeLog() {
     });
     setChanges((prev) => !prev);
   };
+
   const ref = useRef();
   OutsideClick(ref, closePopUp);
 
@@ -348,12 +406,10 @@ function TradeLog() {
 
   const sortDataBy = (data, byKey) => {
     let sortedData;
-    console.log(data, byKey);
     const arrayForSort = [...data];
     if (sort?.sort === "ASC") {
       if (byKey.type == "string") {
         sortedData = arrayForSort.sort((a, b) => {
-          console.log(a, b);
           let x = a[byKey.label]?.toLowerCase();
           let y = b[byKey.label]?.toLowerCase();
           if (x > y) {
@@ -372,7 +428,6 @@ function TradeLog() {
     } else {
       if (byKey.type == "string") {
         sortedData = arrayForSort.sort((a, b) => {
-          console.log(a, b);
           let x = a[byKey.label]?.toLowerCase();
           let y = b[byKey.label]?.toLowerCase();
           if (x < y) {
@@ -451,16 +506,36 @@ function TradeLog() {
     }
   };
 
+  const handlePageClick = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= reduxData?.totalRecords / 10) {
+      setPageDetail((prev) => ({ ...prev, page: pageNumber }));
+      let payloadUrl = `&pageSize=${pageDetail.pageSize}&page=${pageNumber}`;
+      dispatch(tradeLogList({ token: token, payloadUrl: payloadUrl }));
+    }
+  };
+
+  const [questionnaireModal, setShowQuesitonireModal] = useState(false);
+  const [questionnaireId, setQuestionnaireId] = useState("");
+  const onCloseQuestionnaire = () => {
+    setShowQuesitonireModal(false);
+    setQuestionnaireId("");
+  };
+
+  const onOpenQuestionnaire = (id) => {
+    setQuestionnaireId(id);
+    setShowQuesitonireModal(true);
+    dispatch(getTradeById({ id, token }));
+  };
+
   return (
     <>
-      <input
-        type="text"
-        value={searchText}
-        onChange={handleSearchInputChange}
-        placeholder="Search..."
-      />
-
-      {tradeList && tradeList.length ? (
+      {questionnaireModal && questionnaireId && (
+        <DailyQuestionnaire
+          closePopUp={onCloseQuestionnaire}
+          questionnaireId={questionnaireId}
+        />
+      )}
+      {tradeList && tradeList.length>0 ? (
         <div className="main-content demo-b">
           {popUp && (
             <div ref={ref}>
@@ -492,6 +567,21 @@ function TradeLog() {
                 </>
               ) : (
                 <>
+                  <input
+                    type="text"
+                    value={searchText}
+                    onChange={handleSearchInputChange}
+                    placeholder="Search..."
+                    style={{
+                      width: "80%",
+                      resize: "none",
+                      padding: "10px",
+                      border: "1px solid #E4E4E4",
+                      borderRadius: "12px",
+                      height: "40px",
+                      textAlign: "center",
+                    }}
+                  />
                   <li
                     onClick={() => {
                       setEdit(true);
@@ -512,7 +602,7 @@ function TradeLog() {
                       headers={Object.keys(tableHeadingObj).map((heading) => {
                         return {
                           key: tableHeadingObj[heading].label,
-                          label: heading.toLowerCase().replace(/\s+/g, "_"),
+                          label: heading?.toLowerCase().replace(/\s+/g, "_"),
                         };
                       })}
                       filename={"tradelog-exports.csv"}
@@ -608,6 +698,7 @@ function TradeLog() {
                         <th key={index}>{customHeader}</th>
                       ))} */}
                       <th key={"addColumn"}>Dynamic Column</th>
+                      <th>Daily Questionnaire</th>
                       <th key={"heads"}>Actions</th>
                     </tr>
                   </thead>
@@ -642,7 +733,13 @@ function TradeLog() {
                         trade_tags: "",
                         comment: "",
                         dynamicColumnsField: "",
-                        dynamicColumn: [],
+                        ...columnDetail?.reduce((acc, item) => {
+                          return {
+                            ...acc,
+                            [item.column_name]: "",
+                          };
+                        }, {}),
+                        dynamicColumn:[],
                       }}
                       validationSchema={tradeSchema}
                       onSubmit={handleAddSubmit}
@@ -801,14 +898,14 @@ function TradeLog() {
                                     "trade_risk",
                                     `${e.target.value}:${
                                       values?.trade_risk
-                                        .replace(/ /g, "")
+                                        ?.replace(/ /g, "")
                                         .split(/:/g)[1] || 1
                                     }`
                                   );
                                 }}
                                 value={
                                   values?.trade_risk
-                                    .replace(/ /g, "")
+                                    ?.replace(/ /g, "")
                                     .split(/:/g)[0] || 1
                                 }
                               />
@@ -819,19 +916,18 @@ function TradeLog() {
                                 className="w-[50%]"
                                 type="number"
                                 onChange={(e) => {
-                                  console.log(e.target.value);
                                   setFieldValue(
                                     "trade_risk",
                                     `${
                                       values?.trade_risk
-                                        .replace(/ /g, "")
+                                        ?.replace(/ /g, "")
                                         .split(/:/g)[0] || 1
                                     }:${e.target.value}`
                                   );
                                 }}
                                 value={
                                   values?.trade_risk
-                                    .replace(/ /g, "")
+                                    ?.replace(/ /g, "")
                                     .split(/:/g)[1] || 1
                                 }
                               />
@@ -983,11 +1079,7 @@ function TradeLog() {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  setDynamicColumns((prevColumns) => [
-                                    ...prevColumns,
-                                    values.dynamicColumn,
-                                  ]);
-                                  setFieldValue("dynamicColumnsField", ""); // Clear the input field after adding
+                                  setFieldValue("dynamicColumnsField", "");
                                   dispatch(
                                     createColumnData({
                                       token: token,
@@ -999,15 +1091,12 @@ function TradeLog() {
                                 Add Column
                               </button>
                             </td>
+                            <td> </td>
                             <td>
                               <button
                                 type="button"
                                 className="submit-btn"
                                 onClick={() => {
-                                  //setting all columnDetail to empty string
-                                  columnDetail?.map((item) => {
-                                    setFieldValue(item?.column_name, "");
-                                  });
                                   handleSubmit();
                                 }}
                               >
@@ -1054,7 +1143,7 @@ function TradeLog() {
                               opening_balance: item?.opening_balance || "",
                               trade_tags: item?.trade_tags || "",
                               comment: item?.comment || "",
-                              dynamicColumn: item?.dynamicColumn
+                              dynamicColumn: item?.dynamicColumn.length>0
                                 ? matchAndMapColumns(
                                     columnDetail,
                                     item?.dynamicColumn
@@ -1063,13 +1152,18 @@ function TradeLog() {
                             }}
                             validationSchema={tradeSchema}
                             innerRef={formikRef}
-                            // onSubmit={handleEditSubmit}
+                            onSubmit={handlesSubmit}
                           >
-                            {({ isSubmitting, values, setFieldValue }) => {
+                            {({
+                              isSubmitting,
+                              values,
+                              setFieldValue,
+                              handleSubmit,
+                            }) => {
                               return (
                                 <tr key={index} className={index}>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <ReactDatePicker
                                         id="trade_date1"
                                         name="trade_date1"
@@ -1121,7 +1215,7 @@ function TradeLog() {
                                     </Field>
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1168,7 +1262,7 @@ function TradeLog() {
                                     />
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="number"
@@ -1192,7 +1286,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="number"
@@ -1216,7 +1310,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1240,7 +1334,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="number"
@@ -1264,7 +1358,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1288,7 +1382,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1397,7 +1491,7 @@ function TradeLog() {
                                     />
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <input
                                           className="w-[50%]"
@@ -1408,14 +1502,14 @@ function TradeLog() {
                                               index,
                                               `${e.target.value}:${
                                                 item?.trade_risk
-                                                  .replace(/ /g, "")
+                                                  ?.replace(/ /g, "")
                                                   .split(/:/g)[1] || 1
                                               }`
                                             );
                                           }}
                                           value={
                                             item?.trade_risk
-                                              .replace(/ /g, "")
+                                              ?.replace(/ /g, "")
                                               .split(/:/g)[0] || 1
                                           }
                                         />
@@ -1431,14 +1525,14 @@ function TradeLog() {
                                               index,
                                               `${
                                                 item?.trade_risk
-                                                  .replace(/ /g, "")
+                                                  ?.replace(/ /g, "")
                                                   .split(/:/g)[0] || 1
                                               }:${e.target.value}`
                                             );
                                           }}
                                           value={
                                             item?.trade_risk
-                                              .replace(/ /g, "")
+                                              ?.replace(/ /g, "")
                                               .split(/:/g)[1] || 1
                                           }
                                         />
@@ -1448,7 +1542,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1499,7 +1593,7 @@ function TradeLog() {
                                     />
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1523,7 +1617,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1554,7 +1648,7 @@ function TradeLog() {
                                   name="trade_charges"
                                   component="div"
                                 /> */}
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1578,7 +1672,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1602,7 +1696,7 @@ function TradeLog() {
                                     )}
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1653,7 +1747,7 @@ function TradeLog() {
                                     />
                                   </td>
                                   <td>
-                                    {edit ? (
+                                    {id === item?.id || edit ? (
                                       <>
                                         <Field
                                           type="text"
@@ -1665,9 +1759,10 @@ function TradeLog() {
                                               e.target.value
                                             )
                                           }
-                                          value={item?.opening_balance?.toFixed(
-                                            2
-                                          )}
+                                          value={
+                                            item?.opening_balance &&
+                                            item?.opening_balance
+                                          }
                                         />
                                         <ErrorMessage
                                           name="opening_balance"
@@ -1675,7 +1770,10 @@ function TradeLog() {
                                         />
                                       </>
                                     ) : (
-                                      item?.opening_balance?.toFixed(2)
+                                      item?.opening_balance &&
+                                      parseFloat(item?.opening_balance).toFixed(
+                                        2
+                                      )
                                     )}
                                   </td>
                                   <td>
@@ -1695,7 +1793,7 @@ function TradeLog() {
                                       item?.dynamicColumn
                                     ).map((items) => (
                                       <td>
-                                        {edit ? (
+                                        {id === item?.id || edit ? (
                                           <>
                                             <Field
                                               type="text"
@@ -1719,6 +1817,16 @@ function TradeLog() {
                                         )}
                                       </td>
                                     ))}
+                                  <td> </td>
+                                  <td>
+                                    <button
+                                      onClick={() => {
+                                        onOpenQuestionnaire(item?.id);
+                                      }}
+                                    >
+                                      Fill up DailyQuestionnaire
+                                    </button>
+                                  </td>
 
                                   {/* {columnDetail?.length > 0
                                     ? columnDetail?.map((items) => (
@@ -1799,15 +1907,25 @@ function TradeLog() {
                               </td> */}
 
                                   <td>
-                                    {/* { <button
-                                 type="button"
-                                 className="button"
-                                 onClick={() => {
-                                   setEdit(index), setId(item?.id);
-                                 }}
-                               >
-                                 Edit
-                               </button>} */}
+                                    {!(id === item?.id) ? (
+                                      <button
+                                        type="button"
+                                        className="button"
+                                        onClick={() => {
+                                          setId(item?.id);
+                                        }}
+                                      >
+                                        Edit
+                                      </button>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        className="button"
+                                        onClick={handleEditSubmit}
+                                      >
+                                        Save
+                                      </button>
+                                    )}
                                   </td>
                                 </tr>
                               );
@@ -1820,14 +1938,15 @@ function TradeLog() {
               </div>
             </div>
           </div>
-          {pageDetail.page > 1 && (
-            <button onClick={handlePrevious}>Previous</button>
-          )}
-          {pageDetail.page < reduxData?.totalRecords / 10 && (
-            <button onClick={handleNext}>Next</button>
-          )}
+          <Pagination
+            pageDetail={pageDetail}
+            reduxData={reduxData}
+            handlePrevious={handlePrevious}
+            handleNext={handleNext}
+            handlePageClick={handlePageClick}
+          />
         </div>
-      ) : tradeList?.length === 0 ? (
+      ) : reduxData.data?.length === 0 ? (
         <>
           <div className="main-content demo-b">
             <div className="tradelog-tbl">
@@ -1899,10 +2018,14 @@ function TradeLog() {
                             </span>
                           </th>
                         ))}
-                        {/* {columnDetail?.length > 0 &&
-                    columnDetail?.map((header, index) => (
-                      <th key={index}>{header?.column_name}</th>
-                    ))} */}
+                        {columnDetail?.length > 0 &&
+                          columnDetail?.map((header, index) => (
+                            <th key={index}>{header?.column_name}</th>
+                          ))}
+                        {/* {dynamicColumns.map((customHeader, index) => (
+                        <th key={index}>{customHeader}</th>
+                      ))} */}
+                        <th key={"addColumn"}>Dynamic Column</th>
                         <th key={"heads"}>Actions</th>
                       </tr>
                     </thead>
@@ -1936,7 +2059,12 @@ function TradeLog() {
                           opening_balance: "",
                           trade_tags: "",
                           comment: "",
-                          dynamicColumn: [],
+                          dynamicColumnsField: "",
+                          ...columnDetail?.reduce((acc, item) => {
+                            acc[item?.column_name] = "";
+                            return acc;
+                          }, {}),
+                          dynamicColumn:[],
                         }}
                         validationSchema={tradeSchema}
                         onSubmit={handleAddSubmit}
@@ -2104,14 +2232,14 @@ function TradeLog() {
                                       "trade_risk",
                                       `${e.target.value}:${
                                         values?.trade_risk
-                                          .replace(/ /g, "")
+                                          ?.replace(/ /g, "")
                                           .split(/:/g)[1] || 1
                                       }`
                                     );
                                   }}
                                   value={
                                     values?.trade_risk
-                                      .replace(/ /g, "")
+                                      ?.replace(/ /g, "")
                                       .split(/:/g)[0] || 1
                                   }
                                 />
@@ -2127,14 +2255,14 @@ function TradeLog() {
                                       "trade_risk",
                                       `${
                                         values?.trade_risk
-                                          .replace(/ /g, "")
+                                          ?.replace(/ /g, "")
                                           .split(/:/g)[0] || 1
                                       }:${e.target.value}`
                                     );
                                   }}
                                   value={
                                     values?.trade_risk
-                                      .replace(/ /g, "")
+                                      ?.replace(/ /g, "")
                                       .split(/:/g)[1] || 1
                                   }
                                 />
@@ -2237,6 +2365,60 @@ function TradeLog() {
                                   Preview
                                 </button>
                                 <ErrorMessage name="image" component="div" />
+                              </td>
+                              {columnDetail?.length > 0 &&
+                                columnDetail?.map((items) => (
+                                  <td>
+                                    <Field
+                                      type="text"
+                                      name={`${items?.column_name}`}
+                                    />
+                                    <ErrorMessage
+                                      name={`${items?.column_name}`}
+                                      component="div"
+                                    />
+                                  </td>
+                                ))}
+                              {/* {dynamicColumns.map((customHeader, index) => (
+                              <td key={index}>
+                                <Field name={customHeader} />
+                                <ErrorMessage
+                                  name={customHeader}
+                                  component="div"
+                                />
+                              </td>
+                            ))} */}
+
+                              <td>
+                                <Field
+                                  type="text"
+                                  name="dynamicColumnsField"
+                                  value={`${values.dynamicColumnsField}`}
+                                  onChange={(e) =>
+                                    setFieldValue(
+                                      "dynamicColumnsField",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setDynamicColumns((prevColumns) => [
+                                      ...prevColumns,
+                                      values.dynamicColumn,
+                                    ]);
+                                    setFieldValue("dynamicColumnsField", ""); // Clear the input field after adding
+                                    dispatch(
+                                      createColumnData({
+                                        token: token,
+                                        data: values.dynamicColumnsField,
+                                      })
+                                    );
+                                  }}
+                                >
+                                  Add Column
+                                </button>
                               </td>
                               {/* <td>
                           Render daily questionnaire input field

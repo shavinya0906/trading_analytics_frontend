@@ -1,7 +1,7 @@
 import { Nav } from "react-bootstrap";
 import "./Sidebar.scss";
 import { useState } from "react";
-import Logo from "../../assets/images/logo.png";
+import Logo from "../../assets/images/tradeJournalLogo.svg";
 import HomeLogo from "../../assets/images/menulogo/Home.svg";
 import ChartLogo from "../../assets/images/menulogo/Chart 2.svg";
 import pennewSquer from "../../assets/images/menulogo/Pen New Square.svg";
@@ -26,9 +26,9 @@ const Sidebar = ({ state, setState }) => {
         <Nav className="sidebar-header">
           <Nav.Item>
             <Nav.Link href="/">
-              <img src={Logo} alt="Logo" />
+              <img src={Logo} alt="Logo" height={25} width={25}/>
               {state?.collapsed ? (
-                <span className="text-light nav-items">TradeAnalytics</span>
+                <span className="text-light nav-items">Trade Journal</span>
               ) : (
                 ""
               )}

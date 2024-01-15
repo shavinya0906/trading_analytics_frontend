@@ -12,11 +12,6 @@ const PopUpFilter = (props) => {
   const dispatch = useDispatch();
   const reduxData = useSelector((state) => state);
   const token = reduxData?.auth?.token;
-  // const [asset, setAsset] = useState(["Equity"]);
-  // const [holding, setHolding] = useState(["positional"]);
-  // const [conviction, setConviction] = useState("Low");
-  // const [tradeAccount, setTradeAccount] = useState(["Strategy 1"]);
-  // const [strategyUsed, setStrategyUsed] = useState(["Account A"]);
 
   const [allFiltersData, setAllFiltersData] = useState([]);
 
@@ -32,17 +27,17 @@ const PopUpFilter = (props) => {
   const toggleFilterList = (index) => {
     setAllFiltersData((prev) => {
       const hold = prev.map((item, i) => {
-        item.active = false;
-        if (i == index) {
-          item.active = !item.active;
-        }
-        return item;
+        return {
+          ...item,
+          active: i === index ? !item.active : false,
+        };
       });
+      dispatch(newFilterData(hold));
       return hold;
     });
   };
   const cutomSelection = (index, name) => {
-    const hold = JSON.parse(JSON.stringify(reduxData.trades.filterData)).map(
+    const hold = JSON.parse(JSON.stringify(allFiltersData)).map(
       (item, i) => {
         if (i == index && item.selected) {
           if (item.selected.includes(name)) {
@@ -106,14 +101,14 @@ const PopUpFilter = (props) => {
 
     let makePayload = `?assetClass=${asset}&conviction=${conv}&strategyUsed=${strag}&minPnL=100&maxPnl=400&holdingTradeType=${holding}&tradingAccount=${tradeAcc}`;
     // let makePayload = `?assetClass=${asset}&conviction=${conv}&strategyUsed=${strag}&minPnL=100&maxPnl=400&holdingTradeType=${holding}&tradingAccount=${tradeAcc}&startDate=${startDate}&endDate=${endDate}`;
-    dispatch(tradeLogUpdateFilter({ toke: token, values: makePayload }));
+    dispatch(tradeLogUpdateFilter({ token: token, values: makePayload }));
     closePopUp();
   };
 
   const dropdownList = useMemo(() => {
     return (
       <ul className="mainUl">
-        {reduxData.trades.filterData.map((item, i) => {
+        {allFiltersData?.map((item, i) => {
           return (
             <li key={i} className="mainLi">
               {" "}

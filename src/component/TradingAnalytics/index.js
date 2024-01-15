@@ -8,6 +8,7 @@ import {
 } from "../../store/slice/tradeAnalyticsSlice";
 import TradeAnalyticsTab from "./components/TradeAnalyticsTab";
 import AdvancedGraph from "./components/AdvancedGraph";
+import MonthlyQA from "./components/MonthlyQA";
 
 const TradeAnalytics = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const TradeAnalytics = () => {
       path: "graph/drawdown-analysis",
     },
     { name: "Advanced", active: false, path: "graph/" },
+    { name: "Monthly Q&A", active: false, path: "" },
   ]);
   const [tradeHeadersCurrent, setTradeHeadersCurrent] = useState("Overview");
   const [mainData, setMainData] = useState([]);
@@ -265,6 +267,8 @@ const TradeAnalytics = () => {
               />
             ) : tradeHeadersCurrent == "Advanced" ? (
               <AdvancedGraph />
+            ) : tradeHeadersCurrent == "Monthly Q&A" ? (
+              <MonthlyQA />
             ) : (
               ""
             )}

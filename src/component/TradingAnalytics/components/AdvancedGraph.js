@@ -113,51 +113,58 @@ const AdvancedGraph = () => {
   };
 
   return (
-    <div>
-      <div>
-        <label>X-axis:</label>
-        <select value={xAxis} onChange={(e) => handleXChange(e.target.value)}>
-          <option value="" disabled>
-            Select X-axis
-          </option>
-          {xOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
+    <div className="advanced-graph-container">
+      <div className="graph-controls">
+        <div>
+          <label>X-axis:</label>
+          <select
+            value={xAxis}
+            onChange={(e) => handleXChange(e.target.value)}
+            className="axis-dropdown"
+          >
+            <option value="" disabled>
+              Select X-axis
             </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label>Y-axis:</label>
-        <select value={yAxis} onChange={(e) => handleYChange(e.target.value)}>
-          <option value="" disabled>
-            Select Y-axis
-          </option>
-          {yOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
+            {xOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Y-axis:</label>
+          <select
+            value={yAxis}
+            onChange={(e) => handleYChange(e.target.value)}
+            className="axis-dropdown"
+          >
+            <option value="" disabled>
+              Select Y-axis
             </option>
-          ))}
-        </select>
+            {yOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <div>
-        {/* ... Your existing code for dropdowns */}
-        <div className="col-md-6 col-12 chat-card" >
-          <div className="card" style={{ marginBottom: "40px" }}>
-            <div className="card-body" style={{ marginBottom: "20px" }}>
-              {dataType === "splittedBarGraph" ? (
-                <SplittedBarGraph dataList={chartData} xAxis={xAxis} />
-              ) : (
-                chartData && (
-                  <Graph
-                    graphData={chartData}
-                    xTitle={xAxis}
-                    yTitle={yAxis}
-                    color="#86E8D0"
-                  />
-                )
-              )}
-            </div>
+      <div className="chart-container">
+        <div className="card" style={{height:"500px"}}>
+          <div className="card-body">
+            {dataType === "splittedBarGraph" ? (
+              <SplittedBarGraph dataList={chartData} xAxis={xAxis} />
+            ) : (
+              chartData && (
+                <Graph
+                  graphData={chartData}
+                  xTitle={xAxis}
+                  yTitle={yAxis}
+                  color="#86E8D0"
+                />
+              )
+            )}
           </div>
         </div>
       </div>
