@@ -16,8 +16,11 @@ import FutureSimulator from "./FutureSimulator";
 import PreviousTradebook from "./PreviousTradebook";
 import * as XLSX from "xlsx";
 import { sessionList, sessionAdd } from "../../store/slice/sessionSlice";
+import { Route,Routes,Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Tools = () => {
+  const navigate=useNavigate();
   const [pastedData, setPastedData] = useState([]);
   const [expandedIndexes, setExpandedIndexes] = useState([]);
   const fileRef = useRef(null);
@@ -100,6 +103,7 @@ const Tools = () => {
   const currentHeader = (position) => {
     dispatch(addCurrentTab(toolsHeaders[position].name));
     settoolsHeadersCurrent((prev) => toolsHeaders[position].name);
+    navigate(`/${toolsHeaders[position].path}`);
     setPath((prev) => toolsHeaders[position].path);
     settoolsHeaders((prev) => {
       const hold = JSON.parse(JSON.stringify(prev)).map((item, i) => {
@@ -293,9 +297,15 @@ const Tools = () => {
               ""
             )}
           </div>
-          {toolsHeadersCurrent == "Sessions" ? "" : ""}
           <div className="toolsBody">
-            {reduxData.tools.currentTab == "Sessions" ? (
+          <Routes>
+              <Route
+                path="/"
+                element={<Navigate to="/tools/sessions" />}
+              />
+              <Route
+                path="/sessions"
+                element={
               <>
                 <Container className="sessions-container">
                   <Row>
@@ -461,16 +471,22 @@ const Tools = () => {
                     </Row>
                   </Container>
                 )}
-              </>
-            ) : reduxData.tools.currentTab === "Missed Trade Log" ? (
+              </>}/>
+              <Route
+                path="/missed-trade-log"
+                element={
               <>
                 <TradeLog />
-              </>
-            ) : reduxData.tools.currentTab === "Future Simulator" ? (
+              </>}/>
+              <Route
+                path="/future-simulator"
+                element={
               <>
                 <FutureSimulator />
-              </>
-            ) : reduxData.tools.currentTab === "Previous Tradebook" ? (
+              </>}/>
+              <Route
+                path="/previous-tradebook"
+                element={
               <>
                 <textarea
                   onPaste={handlePaste}
@@ -487,12 +503,10 @@ const Tools = () => {
                   }}
                 ></textarea>
                 <PreviousTradebook data={data} />
-              </>
-            ) : (
-              ""
-            )}
-          </div>
+              </>}/>
+              </Routes>
         </div>
+          </div>
       }
     </>
   );

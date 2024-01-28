@@ -231,21 +231,16 @@ function TradeLog() {
     const charges = originalObject?.trade_charges;
     const penalties = originalObject?.trade_penalties;
     let newOpeningBalance = reduxData.lastAddedTradeOpeningBalance;
-    console.log(newOpeningBalance);
     if (pnl) {
       newOpeningBalance += pnl;
-      console.log(newOpeningBalance);
     }
     if (charges) {
       newOpeningBalance -= charges;
-      console.log(newOpeningBalance);
     }
     if (penalties) {
       newOpeningBalance -= penalties;
-      console.log(newOpeningBalance);
     }
     const calculatedBalance = newOpeningBalance;
-    console.log(newOpeningBalance);
     return calculatedBalance;
   }
 
@@ -535,7 +530,7 @@ function TradeLog() {
           questionnaireId={questionnaireId}
         />
       )}
-      {tradeList && tradeList.length>0 ? (
+      {tradeList && tradeList.length > 0 ? (
         <div className="main-content demo-b">
           {popUp && (
             <div ref={ref}>
@@ -546,10 +541,10 @@ function TradeLog() {
             </div>
           )}
           <div className="customFilterButton">
-            <ul>
-              {edit ? (
-                <>
-                  {" "}
+            {edit ? (
+              <>
+                {" "}
+                <ul>
                   <li
                     onClick={() => {
                       setEdit(false);
@@ -564,62 +559,67 @@ function TradeLog() {
                   >
                     Save
                   </li>
-                </>
-              ) : (
-                <>
+                </ul>
+              </>
+            ) : (
+              <>
+                <div className="textbox">
                   <input
                     type="text"
                     value={searchText}
                     onChange={handleSearchInputChange}
                     placeholder="Search..."
                     style={{
-                      width: "80%",
+                      width: "30%",
                       resize: "none",
                       padding: "10px",
-                      border: "1px solid #E4E4E4",
+                      border: "1px solid",
                       borderRadius: "12px",
                       height: "40px",
                       textAlign: "center",
+                      // marginLeft:"20px"
                     }}
                   />
-                  <li
-                    onClick={() => {
-                      setEdit(true);
-                    }}
-                  >
-                    Edit{" "}
-                    <span>
-                      <img src={EditIcon} alt="edit filter" />
-                    </span>
-                  </li>
-                  <li className="export-data">
-                    <CSVLink
-                      data={tradeList.map((el) => ({
-                        ...el,
-                        trade_date: new Date(el.trade_date).toDateString(),
-                        // trade_date: "ss"
-                      }))}
-                      headers={Object.keys(tableHeadingObj).map((heading) => {
-                        return {
-                          key: tableHeadingObj[heading].label,
-                          label: heading?.toLowerCase().replace(/\s+/g, "_"),
-                        };
-                      })}
-                      filename={"tradelog-exports.csv"}
+                  <ul>
+                    <li
+                      onClick={() => {
+                        setEdit(true);
+                      }}
                     >
-                      Export
-                      <img src={ExportIcon} alt="main filter" />
-                    </CSVLink>
-                  </li>
-                  <li onClick={togglePopUp}>
-                    Filters{" "}
-                    <span>
-                      <img src={FilterIcon} alt="main filter" />
-                    </span>
-                  </li>
-                </>
-              )}
-            </ul>
+                      Edit{" "}
+                      <span>
+                        <img src={EditIcon} alt="edit filter" />
+                      </span>
+                    </li>
+                    <li className="export-data">
+                      <CSVLink
+                        data={tradeList.map((el) => ({
+                          ...el,
+                          trade_date: new Date(el.trade_date).toDateString(),
+                          // trade_date: "ss"
+                        }))}
+                        headers={Object.keys(tableHeadingObj).map((heading) => {
+                          return {
+                            key: tableHeadingObj[heading].label,
+                            label: heading?.toLowerCase().replace(/\s+/g, "_"),
+                          };
+                        })}
+                        filename={"tradelog-exports.csv"}
+                      >
+                        Export
+                        <img src={ExportIcon} alt="main filter" />
+                      </CSVLink>
+                    </li>
+                    <li onClick={togglePopUp}>
+                      Filters{" "}
+                      <span>
+                        <img src={FilterIcon} alt="main filter" />
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
           <div className="tradelog-tbl">
             <div className="table_wrapper">
@@ -739,7 +739,7 @@ function TradeLog() {
                             [item.column_name]: "",
                           };
                         }, {}),
-                        dynamicColumn:[],
+                        dynamicColumn: [],
                       }}
                       validationSchema={tradeSchema}
                       onSubmit={handleAddSubmit}
@@ -1143,12 +1143,13 @@ function TradeLog() {
                               opening_balance: item?.opening_balance || "",
                               trade_tags: item?.trade_tags || "",
                               comment: item?.comment || "",
-                              dynamicColumn: item?.dynamicColumn.length>0
-                                ? matchAndMapColumns(
-                                    columnDetail,
-                                    item?.dynamicColumn
-                                  )
-                                : [],
+                              dynamicColumn:
+                                item?.dynamicColumn.length > 0
+                                  ? matchAndMapColumns(
+                                      columnDetail,
+                                      item?.dynamicColumn
+                                    )
+                                  : [],
                             }}
                             validationSchema={tradeSchema}
                             innerRef={formikRef}
@@ -1798,14 +1799,20 @@ function TradeLog() {
                                             <Field
                                               type="text"
                                               name={`${items?.name}`}
-                                              onChange={(e) =>
+                                              onChange={(e) => {
                                                 modifyExistingData(
                                                   e.target.name,
                                                   index,
                                                   e.target.value
-                                                )
-                                              }
-                                              value={items?.value}
+                                                );
+                                              }}
+                                              value={matchAndMapColumns(
+                                                columnDetail,
+                                                item?.dynamicColumn
+                                              ).find(
+                                                (el) =>
+                                                  el?.name === items?.name
+                                              )?.value}
                                             />
                                             <ErrorMessage
                                               name={`${items?.name}`}
@@ -2064,7 +2071,7 @@ function TradeLog() {
                             acc[item?.column_name] = "";
                             return acc;
                           }, {}),
-                          dynamicColumn:[],
+                          dynamicColumn: [],
                         }}
                         validationSchema={tradeSchema}
                         onSubmit={handleAddSubmit}

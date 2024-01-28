@@ -24,10 +24,10 @@ const DashboardRouter = ({ state }) => {
           <Route path="/tradelog/:starttDate?/:enddDate?" element={<TradeLog />} />
           <Route path="/strategies" element={<Strategies />} />
           <Route path="/trading-accounts" element={<TradingAccounts />} />
-          <Route path="/trader-analytics" element={<TradeAnalytics />} />
-          <Route path="/tools" element={<Tools />} />
+          <Route path="/trader-analytics/*" element={<TradeAnalytics />} />
+          <Route path="/tools/*" element={<Tools />} />
           <Route path="/calendar" element={<Calendar />} />
-          <Route path="/calculator" element={<Calculator />} />
+          <Route path="/calculator/*" element={<Calculator />} />
           <Route path="/mantra" element={<Mantra />} />
           <Route
                 path="/"

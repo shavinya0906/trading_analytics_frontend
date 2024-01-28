@@ -14,7 +14,9 @@ const Graph = (props) => {
   }
 
   // Filter out points with y=0
-  const filteredGraphData = graphData.filter((item) => item.y !== null && item.y !== 0);
+  const filteredGraphData = graphData.filter(
+    (item) => item.y !== null && item.y !== 0
+  );
 
   const data = {
     labels: filteredGraphData.map((item) => item.x),
@@ -65,7 +67,22 @@ const Graph = (props) => {
         },
       },
     },
-    barPercentage: 0.5,
+    barPercentage:
+      filteredGraphData.length === 1
+        ? 0.1
+        : filteredGraphData.length === 2
+        ? 0.2
+        : filteredGraphData.length === 3
+        ? 0.3
+        : filteredGraphData.length === 4
+        ? 0.4
+        : filteredGraphData.length === 5
+        ? 0.5
+        : filteredGraphData.length === 6
+        ? 0.6
+        : filteredGraphData.length === 7
+        ? 0.7
+        : 0.8,
   };
 
   return <Bar data={data} options={options} height={190} />;

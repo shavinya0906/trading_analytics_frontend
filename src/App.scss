@@ -59,7 +59,7 @@ $white: #ffffff;
 }
 
 .main-content-wrap.is-close {
-  width: calc(100vw - 4vw);
+  width: calc(100vw - 5.5vw);
   margin-left: auto;
   transition: all 0.5s;
 }
@@ -82,6 +82,7 @@ $white: #ffffff;
     list-style-type: none;
     display: flex;
     justify-content: end;
+    width:100%;
     gap: 10px;
     li, button {
       cursor: pointer;
@@ -104,6 +105,9 @@ $white: #ffffff;
       }
     }
   }
+  .textbox{
+    display: flex;
+}
 }
 
 .main-content {
