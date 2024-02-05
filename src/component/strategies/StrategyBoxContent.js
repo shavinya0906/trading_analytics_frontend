@@ -16,13 +16,13 @@ const StrategiesBoxContent = ({ strategy }) => {
     setFormData({
       strategies_name: strategy.strategies_name,
       strategies_desc: strategy.strategies_desc,
-      strategies_Id: strategy.strategies_Id,
+      strategies_Id: strategy.id,
     });
     setFormToggle((prev) => !prev);
     setFormStatus("edit");
   };
   const removeHandler = () => {
-    dispatch(strategyRemove({ values: {strategies_Id: strategy.strategies_Id}}))
+    dispatch(strategyRemove({ values: {strategies_Id: strategy.id}}))
   }
   return (
     <div

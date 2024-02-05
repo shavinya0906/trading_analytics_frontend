@@ -45,7 +45,7 @@ const Mantra = () => {
   return (
     <div>
       <div>
-        <p className="heading-mantra">Mantra</p>
+        {/* <p className="heading-mantra">Mantra</p> */}
         <div className="mantra-description">
           <p class="mantra-text">{selectedMantra}</p>
           <div style={{ textAlign: "right" }}>
