@@ -491,7 +491,6 @@ function TradeLog() {
   };
 
   const handlePrevious = () => {
-    
     //handling function according to reduxData.totalRecords
     if (pageDetail.page > 0) {
       setPageDetail((prev) => ({ ...prev, page: prev.page - 1 }));
