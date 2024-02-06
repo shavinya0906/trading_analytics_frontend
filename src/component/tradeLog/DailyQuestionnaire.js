@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTradeById, updateTrade } from "../../store/slice/tradeLogSlice";
 
 const DailyQuestionnaire = ({ closePopUp, questionnaireId }) => {
+  
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
   const reduxData = useSelector((state) => state);
