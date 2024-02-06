@@ -5,6 +5,7 @@ import StrategyForm from "./StrategyForm";
 import { useStrategy } from "../../context/StrategyContext";
 import { useDispatch, useSelector } from "react-redux";
 import { strategyList } from "../../store/slice/strategySlice";
+import Loader from "./../Loader";
 
 const Strategies = () => {
   const [strategies, setStrategies] = useState([

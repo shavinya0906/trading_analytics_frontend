@@ -390,6 +390,27 @@ function TradeLog() {
     setChanges((prev) => !prev);
   };
 
+  const modifyExistingDynamicColumnData=(field,id,value)=>{
+    setAllIds((prev) => [...prev, id]);
+    console.log(field,id,value,"idadajdkajkaksmm")
+    setTradeList((prev) => {
+      const hold = JSON.parse(JSON.stringify(prev)).map((item, i) => {
+        if (i === id) {
+          item.dynamicColumn = item.dynamicColumn.map((dynamicColumnItem) => {
+            if (dynamicColumnItem.key === field) {
+              dynamicColumnItem.value = value;
+            }
+            return dynamicColumnItem;
+          });
+        }
+        return item;
+      });
+
+      return hold;
+    });
+    setChanges((prev) => !prev);
+  }
+
   const ref = useRef();
   OutsideClick(ref, closePopUp);
 
@@ -1800,7 +1821,7 @@ function TradeLog() {
                                               type="text"
                                               name={`${items?.name}`}
                                               onChange={(e) => {
-                                                modifyExistingData(
+                                                modifyExistingDynamicColumnData(
                                                   e.target.name,
                                                   index,
                                                   e.target.value
