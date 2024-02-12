@@ -40,27 +40,27 @@ const Home = () => {
         <div className="dash-row">
           <div className="dashboard-small-card">
             <div className="">
-              <h5>INR {dataList?.netPNL?.toFixed(2)}</h5>
+              <h5>INR {dataList?.netPNL ? dataList?.netPNL.toFixed(2):'--'}</h5>
               <h6>Net PNL</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>INR {dataList?.avgReturnPerDay?.toFixed(2)}</h5>
+              <h5>INR {dataList?.avgReturnPerDay?dataList?.avgReturnPerDay?.toFixed(2):"--"}</h5>
               <h6>Avg Return/Day</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>&nbsp;
-                {dataList?.karmaFactor && dataList?.karmaFactor[0]?.toFixed(2)}
+              <h5>
+                {dataList?.karmaFactor ? dataList?.karmaFactor[0]?.toFixed(2):"--"}
               </h5>
               <h6>Karma Factor</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>INR {dataList?.maxDD?.toFixed(2)}</h5>
+              <h5>INR {dataList?.maxDD?dataList?.maxDD?.toFixed(2):"--"}</h5>
               <h6>Max DD</h6>
             </div>
           </div>
@@ -68,25 +68,25 @@ const Home = () => {
         <div className="dash-row mt-5">
           <div className="dashboard-small-card">
             <div className="">
-              <h5>&nbsp;{dataList?.winPercentage?.toFixed(2)}%</h5>
+              <h5>{dataList?.winPercentage ? dataList?.winPercentage.toFixed(2):"--"}%</h5>
               <h6>Win %</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>&nbsp;{dataList?.RRratio?.toFixed(2)}</h5>
+              <h5>{dataList?.RRratio ? dataList?.RRratio?.toFixed(2):"--"}</h5>
               <h6>R:R ratio</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>&nbsp;{dataList?.avgWinningTrade?.toFixed(2)}</h5>
+              <h5>INR {dataList?.avgWinningTrade ? dataList?.avgWinningTrade?.toFixed(2):"--"}</h5>
               <h6>Average winning trade</h6>
             </div>
           </div>
           <div className="dashboard-small-card">
             <div className="">
-              <h5>&nbsp;{dataList?.avgLosingTrade?.toFixed(2)}</h5>
+              <h5>INR {dataList?.avgLosingTrade ? dataList?.avgLosingTrade?.toFixed(2):"--"}</h5>
               <h6>Average losing trade</h6>
             </div>
           </div>
@@ -95,7 +95,7 @@ const Home = () => {
         <div className="row mt-5 main-card-wrap">
           <div className="col-md-6 col-12 ">
             <div className="insights-card chat-card list-box">
-              <h6>Insights</h6>
+              <p>Insights</p>
               <ul
                 id="arrow-list"
                 style={{ overflowY: "auto", height: "400px" }}
@@ -218,7 +218,7 @@ const Home = () => {
             </div>
           </div>
           <div className="col-md-6 col-12 chat-card">
-            <Card>
+            <Card style={{boxShadow: "5px 5px 5px 2px rgba(204, 204, 204, 0.379)"}}>
               {/* <Card.Header>Equity Curve</Card.Header> */}
               <p>Equity Curve</p>
               <div className="card-body">
@@ -230,7 +230,7 @@ const Home = () => {
 
         <div className="row mt-5">
           <div className="col-md-6 col-12 chat-card">
-            <Card>
+            <Card style={{boxShadow: "5px 5px 5px 2px rgba(204, 204, 204, 0.379)"}}>
               <p>Strategy Performance</p>
               {/* <Card.Header>Strategy Performance</Card.Header> */}
               <div className="card-body">
@@ -240,7 +240,7 @@ const Home = () => {
             </Card>
           </div>
           <div className="col-md-6 col-12 chat-card">
-            <Card>
+            <Card style={{boxShadow: "5px 5px 5px 2px rgba(204, 204, 204, 0.379)"}}>
               <p>Daily PNL</p>
               {/* <Card.Header>Daily PNL</Card.Header> */}
               <div className="card-body">

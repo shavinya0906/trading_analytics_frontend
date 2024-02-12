@@ -9,6 +9,7 @@ const TradeAccountList = ({ list, setFormStatus }) => {
           <p>{el?.trading_account}</p>
           <p>{el?.account_email}</p>
           <p>{el?.account_mobile}</p>
+          <p>{el?.purpose}</p>
         </div>
       ))}
     <div className="add-btn" onClick={() => setFormStatus('add')}>+ Add New Trading Account</div>

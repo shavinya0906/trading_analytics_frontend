@@ -84,12 +84,12 @@ const tradingAccountSlice = createSlice({
       })
       .addCase(tradingAccountAdd.pending, (state, action) => {
         state.isLoading = true;
-        // state.isAddedOrEdited = false;
+        state.isAddedOrEdited = false;
       })
       .addCase(tradingAccountAdd.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.isAddedOrEdited = true;
-        // state.data = action?.payload?.data;
+        state.isAddedOrEdited = true;
+        state.data = [...state.data,action?.payload?.data];
       })
       .addCase(tradingAccountAdd.rejected, (state, action) => {
         state.isLoading = false;

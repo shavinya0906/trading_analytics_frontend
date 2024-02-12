@@ -46,9 +46,12 @@ const CurveChart = ({ dataList }) => {
   };
 
   function formatDate(dateString) {
-    const options = { day: "numeric", month: "numeric", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("en-US", options);
-  }
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear().toString().substr(-2);
+    return `${day} ${month}'${year}`;
+}
 
   const options = {
     responsive: true,
@@ -62,13 +65,16 @@ const CurveChart = ({ dataList }) => {
       x: {
         barThickness: 10,
         ticks: {
-          minRotation: 90,
-          maxRotation: 90,
-          autoSkip: true,
-          maxTicksLimit: 10,
+          // minRotation: 90,
+          // maxRotation: 90,
+          // autoSkip: true,
+          maxTicksLimit: graphData && graphData?.length/8||8, // Specify the maximum number of ticks you want to display
+          font: {
+            size: 12, // Adjust font size
+            weight: '700', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
         },
-      },
-      x: {
         grid: {
           display: false,
         },
@@ -77,6 +83,13 @@ const CurveChart = ({ dataList }) => {
         grid: {
           display: false,
         },
+        ticks:{
+          font: {
+            size: 12, // Adjust font size
+            weight: '700', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
+        }
       },
     },
   };
@@ -89,9 +102,9 @@ const CurveChart = ({ dataList }) => {
         data: graphData.map((data) => data.equity),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
-        pointRadius: 1.5,
+        pointRadius: 2.5,
         pointHoverRadius: 4,
-        borderWidth: 1,
+        borderWidth: 1.8,
       },
     ],
   };
@@ -99,6 +112,7 @@ const CurveChart = ({ dataList }) => {
   useEffect(() => {
     if (dataList?.equityCurveData?.length) {
       const data = sortDataBy(dataList?.equityCurveData);
+      console.log(data,"dataaaaa")
       setGraphData(data);
     }
   }, [dataList]);

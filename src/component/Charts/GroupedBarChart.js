@@ -26,7 +26,19 @@ export function GroupedBarChart({ dataList }) {
         title: {
           display: true,
           text: "Month",
+          font: {
+            size: 12, // Adjust font size
+            weight: '700', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
         },
+        ticks:{
+          font: {
+            size: 12, // Adjust font size
+            weight: '600', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
+        }
       },
       y: {
         grid: {
@@ -35,7 +47,19 @@ export function GroupedBarChart({ dataList }) {
         title: {
           display: true,
           text: "ROI",
+          font: {
+            size: 12, // Adjust font size
+            weight: '700', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
         },
+        ticks:{
+          font: {
+            size: 12, // Adjust font size
+            weight: '600', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
+        }
       },
     },
     responsive: true,

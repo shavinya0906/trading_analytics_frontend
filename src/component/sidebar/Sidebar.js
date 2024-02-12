@@ -30,10 +30,10 @@ const Sidebar = ({ state, setState }) => {
       <div className={`sidebar ${state?.collapsed ? "is-open" : "is-close"}`}>
         <Nav className="sidebar-header">
           <Nav.Item>
-            <Nav.Link onClick={() => handleNavigate("/")}>
-              <img src={Logo} alt="Logo" height={25} width={25} />
+            <Nav.Link onClick={() => handleNavigate("/")} style={{marginLeft:"-13px",display:"flex",justifyContent:"center",alignItems:"center"}}>
+              <img src={Logo} alt="Logo" height={40} width={40}/>
               {state?.collapsed ? (
-                <span className="text-light nav-items">Trade Journal</span>
+                <span className="text-light nav-items" style={{fontSize:"1.25rem",fontWeight:"600",fontFamily:"DM Sans, sans-serif"}}>My Trade Journal</span>
               ) : (
                 ""
               )}

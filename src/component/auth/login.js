@@ -10,13 +10,13 @@ const Login = () => {
   const token = useSelector((state) => state?.auth?.token);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (token) {
-      setTimeout(() => {
-        navigate("/");
-      }, 400);
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     setTimeout(() => {
+  //       navigate("/");
+  //     }, 400);
+  //   }
+  // }, [token]);
 
   const loginSchema = Yup.object().shape({
     password: Yup.string()

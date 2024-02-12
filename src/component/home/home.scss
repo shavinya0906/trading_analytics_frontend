@@ -6,12 +6,13 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    flex-wrap: wrap;
   }
 
   .dashboard-small-card {
+    // flex:1;
     width: 23%;
-    margin: 0 1%;
-    // height: 59px;
+    min-width:150px;
     border-radius: 11.958px;
     border: 1.196px solid #0075FF;
     background: #F4F9FF;
@@ -21,7 +22,7 @@
       margin-bottom: 0;
       // color: #a5a2b8;
       font-family: "DM Sans", sans-serif;
-      font-size: 14.35px;
+      font-size: 0.99rem;
       // border: 1px solid #EFEFF0;
       font-style: normal;
       font-weight: 500;
@@ -32,7 +33,7 @@
       margin-bottom: 0;
       color: #2a2455;
       font-family: "DM Sans", sans-serif;
-      font-size: 22.322px;
+      font-size: 1.4rem;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
@@ -46,14 +47,10 @@
       border-radius: 8px;
       // background: rgba(53, 46, 91, 1);
 
-      h6 {
-        padding: 2.5rem 2.5rem 1rem;
-        // color: #c8c2e8;
-        font-family: "DM Sans", sans-serif;
+      p {
+        font-weight: bold;
         font-size: 1.5rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
+        margin: 2.5rem 0 0 2.5rem;
       }
 
       ul {
@@ -88,7 +85,6 @@
   }
 
   .chat-card {
-    
     .card-header {
       padding: 16px 24px;
     }
@@ -123,6 +119,8 @@
 
 .list-box {
   border: 1px solid #d2d2d2;
+  box-shadow: 5px 5px 5px 2px rgba(204, 204, 204, 0.379);
+  // box-shadow: 3px 3px 3px rgba(180, 179, 179, 0.444) inset;
 }
 
 #arrow-list {

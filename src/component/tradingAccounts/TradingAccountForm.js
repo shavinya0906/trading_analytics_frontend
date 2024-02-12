@@ -13,16 +13,18 @@ const TradingAccountForm = ({ setFormStatus }) => {
       account_email: "",
       account_name: "",
       trading_account: "",
+      purpose:""
     },
     onSubmit: (values) => {
       console.log(values);
-      delete values.purpose;
+      // delete values.purpose;
       const payload = {
         token: token,
         values,
       };
-
+      console.log(payload,"payloaddd")
       dispatch(tradingAccountAdd(payload));
+      setFormStatus("list")
     },
   });
   return (

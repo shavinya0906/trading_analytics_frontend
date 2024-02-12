@@ -44,41 +44,50 @@ export const DailyPnlChart = ({ dataList }) => {
     plugins: {
       legend: {
         display: false,
-        // labels: {
-        //   boxWidth: 10,
-        //   boxHeight: 10,
-        //   font: {
-        //     size: 10,
-        //   },
-        // },
       },
     },
     scales: {
       x: {
+        barThickness: 10,
+        ticks: {
+          maxRotation: 0, // Set the maximum rotation to 0 degrees
+          minRotation: 0, // Set the minimum rotation to 0 degrees
+          autoSkip: true,
+          maxTicksLimit: graphData && graphData?.length/3||8,
+          font: {
+            size: 12, // Adjust font size
+            weight: '700', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
+        },
         grid: {
           display: false,
-        },
-        title: {
-          display: true,
-          text: "Date",
         },
       },
       y: {
         grid: {
           display: false,
         },
-        title: {
-          display: true,
-          text: "PNL ",
-        },
+        ticks:{
+          font: {
+            size: 12, // Adjust font size
+            weight: '700', // Adjust font weight
+            family: 'DM Sans', // Adjust font family
+          },
+        }
       },
     },
   };
-
+  
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear().toString().substr(-2);
+    return `${day} ${month}'${year}`;
+}
   const data = {
-    labels: graphData?.map((data) =>
-      new Date(data.trade_date).toLocaleDateString("en-CA")
-    ),
+    labels:graphData?.map((data) => formatDate(data.trade_date)),
     datasets: [
       {
         label: "Positive Daily PNL",

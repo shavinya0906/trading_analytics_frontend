@@ -19,6 +19,7 @@ import {
 import { updateTradeAnalyticsData } from "../../store/slice/tradeAnalyticsSlice";
 import { dashboardUpdateData } from "../../store/slice/homeSlice";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import CloseIcon from "../../assets/images/closeIcon.svg";
 
 const Header = () => {
   const { starttDate, enddDate } = useParams();
@@ -167,9 +168,11 @@ const Header = () => {
             <div
               className="flex h-[49px] justify-center items-center text-2xl cursor-pointer cross-icon"
               onClick={() => onChange([null, null])}
+              style={{fontSize:"1.8rem"}}
             >
               X
             </div>
+            {/* <img src={CloseIcon} style={{height:"20px", marginTop:"1rem"}} onClick={() => onChange([null, null])}/> */}
             <Link to={"/calendar"} style={{ textDecoration: "none" }}>
               <Button variant="outline-primary" className="outline-button-cal">
                 Calendar
