@@ -8,11 +8,13 @@ import CurveChart from "../Charts/CurveChart";
 import { GroupedBarChart } from "../Charts/GroupedBarChart";
 import { DailyPnlChart } from "../Charts/DailyPnlChart";
 import { insightsData } from "./data";
+import Loader from "./../Loader";
 
 const Home = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.auth?.token);
   const dataList = useSelector((state) => state?.dashboard?.data);
+  const isLoading=useSelector((state)=>state?.dashboard?.isLoading);
 
   useEffect(() => {
     dispatch(getDashbordData(token));
@@ -36,11 +38,12 @@ const Home = () => {
   return (
     <>
       <h1>Dashboard</h1>
+      {!isLoading ?
       <div className="dashboard-content-wrapper">
         <div className="dash-row">
           <div className="dashboard-small-card">
             <div className="">
-              <h5>INR {dataList?.netPNL ? dataList?.netPNL.toFixed(2):'--'}</h5>
+              <h5>INR {dataList?.netPNL ? dataList?.netPNL.toFixed(2):"--"}</h5>
               <h6>Net PNL</h6>
             </div>
           </div>
@@ -251,6 +254,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+         :<Loader />}
     </>
   );
 };

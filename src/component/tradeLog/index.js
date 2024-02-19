@@ -16,6 +16,7 @@ import {
   getColumnData,
   updateColumnData,
   createColumnData,
+  deleteColumnData,
 } from "../../store/slice/newColumnSlice";
 import EditIcon from "../../assets/images/editFilter.svg";
 import FilterIcon from "../../assets/images/filterIcon.svg";
@@ -32,6 +33,7 @@ import { useParams } from "react-router-dom";
 import Pagination from "./Pagination";
 import DailyQuestionnaire from "./DailyQuestionnaire";
 import { getTradeById, updateTrade } from "../../store/slice/tradeLogSlice";
+import Loader from "./../Loader";
 
 const tableHeading = [
   "Date",
@@ -100,6 +102,7 @@ function TradeLog() {
   const [showPrev, setShowPrev] = useState(false);
   const token = useSelector((state) => state?.auth?.token);
   const reduxData = useSelector((state) => state?.trades?.data);
+  const isLoading=useSelector((state)=>state?.trades?.isLoading)
   const { start, end } = useSelector((state) => state?.trades);
   useEffect(() => {
     if (end) {
@@ -543,6 +546,10 @@ function TradeLog() {
     dispatch(getTradeById({ id, token }));
   };
 
+  const deleteColumn=(column_id)=>{
+    dispatch(deleteColumnData({token:token,id:column_id}))
+  }
+
   return (
     <>
       {questionnaireModal && questionnaireId && (
@@ -551,7 +558,7 @@ function TradeLog() {
           questionnaireId={questionnaireId}
         />
       )}
-      {tradeList && tradeList.length > 0 ? (
+      {tradeList && tradeList.length > 0 &&!isLoading ? (
         <div className="main-content demo-b">
           {popUp && (
             <div ref={ref}>
@@ -594,7 +601,7 @@ function TradeLog() {
                       width: "30%",
                       resize: "none",
                       padding: "10px",
-                      border: "1px solid",
+                      border: "1px solid rgb(201, 201, 201)",
                       borderRadius: "12px",
                       height: "40px",
                       textAlign: "center",
@@ -607,9 +614,9 @@ function TradeLog() {
                         setEdit(true);
                       }}
                     >
-                      Edit{" "}
+                      Edit
                       <span>
-                        <img src={EditIcon} alt="edit filter" />
+                        <img src={EditIcon} alt="edit filter" height={18} width={18}/>
                       </span>
                     </li>
                     <li className="export-data">
@@ -713,7 +720,7 @@ function TradeLog() {
                       ))}
                       {columnDetail?.length > 0 &&
                         columnDetail?.map((header, index) => (
-                          <th key={index}>{header?.column_name}</th>
+                          <th key={index}>{header?.column_name}<button onClick={()=>{deleteColumn(header?.id)}}>Delete</button></th>
                         ))}
                       {/* {dynamicColumns.map((customHeader, index) => (
                         <th key={index}>{customHeader}</th>
@@ -1935,6 +1942,7 @@ function TradeLog() {
                               </td> */}
 
                                   <td>
+                                  {/* 
                                     {!(id === item?.id) ? (
                                       <button
                                         type="button"
@@ -1954,7 +1962,8 @@ function TradeLog() {
                                         Save
                                       </button>
                                     )}
-                                  </td>
+                                  */}
+                                  </td> 
                                 </tr>
                               );
                             }}
@@ -1974,8 +1983,26 @@ function TradeLog() {
             handlePageClick={handlePageClick}
           />
         </div>
-      ) : reduxData.data?.length === 0 ? (
+      ) :isLoading?<Loader/>: reduxData.data?.length === 0 ? (
         <>
+          {popUp && (
+            <div ref={ref}>
+              <PopUpFilter
+                closePopUp={closePopUp}
+                setTradeList={setTradeList}
+              />
+            </div>
+          )}
+          <div className="customFilterButton">
+                  <ul>
+                    <li onClick={togglePopUp}>
+                      Filters{" "}
+                      <span>
+                        <img src={FilterIcon} alt="main filter" />
+                      </span>
+                    </li>
+                  </ul>
+          </div>
           <div className="main-content demo-b">
             <div className="tradelog-tbl">
               <div className="table_wrapper">
@@ -2048,7 +2075,7 @@ function TradeLog() {
                         ))}
                         {columnDetail?.length > 0 &&
                           columnDetail?.map((header, index) => (
-                            <th key={index}>{header?.column_name}</th>
+                            <th key={index}>{header?.column_name}<button onClick={()=>{deleteColumn(header?.id)}}>Delete</button></th>
                           ))}
                         {/* {dynamicColumns.map((customHeader, index) => (
                         <th key={index}>{customHeader}</th>

@@ -105,6 +105,20 @@ const PopUpFilter = (props) => {
     closePopUp();
   };
 
+  const resetFilterData = () => {
+    const asset = [];
+    const conv = [];
+    const holding = [];
+    const tradeAcc = [];
+    const strag = [];
+    const monthRange = currentMonthRange(new Date());
+    const oldStart = monthRange.starting.toISOString().substring(0, 10);
+    const oldEnd = monthRange.ending.toISOString().substring(0, 10);
+    const makePayload = `?assetClass=${asset}&conviction=${conv}&strategyUsed=${strag}&minPnL=100&maxPnl=400&holdingTradeType=${holding}&tradingAccount=${tradeAcc}`;
+    dispatch(tradeLogUpdateFilter({ token: token, values: makePayload }));
+    closePopUp(); 
+  };
+
   const dropdownList = useMemo(() => {
     return (
       <ul className="mainUl">
@@ -141,8 +155,9 @@ const PopUpFilter = (props) => {
             </li>
           );
         })}
-        <li className="submitBtn" onClick={sumitFilterData}>
-          <div className="customSubmit">Submit</div>
+        <li className="submitBtn">
+          <div className="customSubmit" onClick={resetFilterData}>Reset</div>
+          <div className="customSubmit" onClick={sumitFilterData}>Submit</div>
         </li>
       </ul>
     );

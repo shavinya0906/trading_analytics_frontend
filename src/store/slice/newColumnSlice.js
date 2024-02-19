@@ -33,6 +33,19 @@ export const createColumnData = createAsyncThunk(
   }
 );
 
+export const deleteColumnData = createAsyncThunk(
+  "auth/deleteColumnData",
+  async ({ token, id }) => {
+    const res = await axios.delete(`${apiUrl}/user_column/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  }
+);
+
 const columnSlice = createSlice({
   name: "new_column",
   initialState: {

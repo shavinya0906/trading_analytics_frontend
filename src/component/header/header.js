@@ -168,9 +168,9 @@ const Header = () => {
             <div
               className="flex h-[49px] justify-center items-center text-2xl cursor-pointer cross-icon"
               onClick={() => onChange([null, null])}
-              style={{fontSize:"1.8rem"}}
+              style={{fontSize:"2rem",paddingBottom:"8px"}}
             >
-              X
+              x
             </div>
             {/* <img src={CloseIcon} style={{height:"20px", marginTop:"1rem"}} onClick={() => onChange([null, null])}/> */}
             <Link to={"/calendar"} style={{ textDecoration: "none" }}>
