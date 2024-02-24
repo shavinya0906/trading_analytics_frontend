@@ -116,7 +116,7 @@ function TradeLog() {
           )
       );
     } else {
-      setTradeList((prev) => reduxData.data);
+      setTradeList((prev) => reduxData?.data);
     }
   }, [end, reduxData]);
   async function getBase64(file) {
