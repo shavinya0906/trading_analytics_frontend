@@ -718,7 +718,7 @@ function TradeLog() {
                           </span>
                         </th>
                       ))}
-                      {columnDetail?.length > 0 &&
+                      {columnDetail?.length > 0 && Object.keys(columnDetail).length > 0 &&
                         columnDetail?.map((header, index) => (
                           <th key={index}>{header?.column_name}<button onClick={()=>{deleteColumn(header?.id)}}>Delete</button></th>
                         ))}
@@ -1069,7 +1069,7 @@ function TradeLog() {
                             component="div"
                           />
                         </td> */}
-                            {columnDetail?.length > 0 &&
+                            {columnDetail && Object.keys(columnDetail).length > 0 &&
                               columnDetail?.map((items) => (
                                 <td>
                                   <Field
@@ -2073,7 +2073,7 @@ function TradeLog() {
                             </span>
                           </th>
                         ))}
-                        {columnDetail?.length > 0 &&
+                        {columnDetail?.length > 0 && Object.keys(columnDetail).length > 0 &&
                           columnDetail?.map((header, index) => (
                             <th key={index}>{header?.column_name}<button onClick={()=>{deleteColumn(header?.id)}}>Delete</button></th>
                           ))}
@@ -2421,7 +2421,7 @@ function TradeLog() {
                                 </button>
                                 <ErrorMessage name="image" component="div" />
                               </td>
-                              {columnDetail?.length > 0 &&
+                              {columnDetail && Object.keys(columnDetail).length > 0 &&
                                 columnDetail?.map((items) => (
                                   <td>
                                     <Field
