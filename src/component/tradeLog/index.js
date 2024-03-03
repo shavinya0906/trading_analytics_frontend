@@ -102,7 +102,7 @@ function TradeLog() {
   const [showPrev, setShowPrev] = useState(false);
   const token = useSelector((state) => state?.auth?.token);
   const reduxData = useSelector((state) => state?.trades?.data);
-  const isLoading=useSelector((state)=>state?.trades?.isLoading)
+  const isLoading = useSelector((state) => state?.trades?.isLoading);
   const { start, end } = useSelector((state) => state?.trades);
   useEffect(() => {
     if (end) {
@@ -393,9 +393,9 @@ function TradeLog() {
     setChanges((prev) => !prev);
   };
 
-  const modifyExistingDynamicColumnData=(field,id,value)=>{
+  const modifyExistingDynamicColumnData = (field, id, value) => {
     setAllIds((prev) => [...prev, id]);
-    console.log(field,id,value,"idadajdkajkaksmm")
+    console.log(field, id, value, "idadajdkajkaksmm");
     setTradeList((prev) => {
       const hold = JSON.parse(JSON.stringify(prev)).map((item, i) => {
         if (i === id) {
@@ -412,7 +412,7 @@ function TradeLog() {
       return hold;
     });
     setChanges((prev) => !prev);
-  }
+  };
 
   const ref = useRef();
   OutsideClick(ref, closePopUp);
@@ -422,6 +422,14 @@ function TradeLog() {
     label: "",
     sort: "ASC",
   });
+
+  const sortDataAndUpdateSort = (label, sortOrder) => {
+    setSort((prev) => ({
+      label: label,
+      sort: sortOrder,
+    }));
+    sortDataBy(tradeList, tableHeadingObj[label], sortOrder);
+  };
 
   const sortDataBy = (data, byKey) => {
     let sortedData;
@@ -546,9 +554,9 @@ function TradeLog() {
     dispatch(getTradeById({ id, token }));
   };
 
-  const deleteColumn=(column_id)=>{
-    dispatch(deleteColumnData({token:token,id:column_id}))
-  }
+  const deleteColumn = (column_id) => {
+    dispatch(deleteColumnData({ token: token, id: column_id }));
+  };
 
   return (
     <>
@@ -558,7 +566,7 @@ function TradeLog() {
           questionnaireId={questionnaireId}
         />
       )}
-      {tradeList && tradeList.length > 0 &&!isLoading ? (
+      {tradeList && tradeList.length > 0 && !isLoading ? (
         <div className="main-content demo-b">
           {popUp && (
             <div ref={ref}>
@@ -616,7 +624,12 @@ function TradeLog() {
                     >
                       Edit
                       <span>
-                        <img src={EditIcon} alt="edit filter" height={18} width={18}/>
+                        <img
+                          src={EditIcon}
+                          alt="edit filter"
+                          height={18}
+                          width={18}
+                        />
                       </span>
                     </li>
                     <li className="export-data">
@@ -658,69 +671,66 @@ function TradeLog() {
                       {tableHeading.map((header, index) => (
                         <th key={header}>
                           {header}
-                          <span
-                            className="sort-arrow"
-                            onClick={() =>
-                              setSort((prev) => {
-                                if (
-                                  prev?.label === "" ||
-                                  prev?.label !== header
-                                ) {
-                                  setSort((prev) => ({
-                                    ...prev,
-                                    label: header,
-                                    sort: "ASC",
-                                  }));
-                                  sortDataBy(
-                                    tradeList,
-                                    tableHeadingObj[header]
-                                  );
-                                } else if (
-                                  prev?.label === header &&
-                                  prev?.label === "ASC"
-                                ) {
-                                  setSort((prev) => ({
-                                    ...prev,
-                                    label: header,
-                                    sort: "DESC",
-                                  }));
-                                  sortDataBy(
-                                    tradeList,
-                                    tableHeadingObj[header]
-                                  );
-                                } else if (
-                                  prev?.label === header &&
-                                  prev?.label === "DESC"
-                                ) {
-                                  setSort((prev) => ({
-                                    ...prev,
-                                    label: header,
-                                    sort: "ASC",
-                                  }));
-                                  sortDataBy(
-                                    tradeList,
-                                    tableHeadingObj[header]
-                                  );
-                                }
-                              })
-                            }
-                          >
-                            <img
-                              style={{ cursor: "pointer" }}
-                              src={
-                                sort?.label === header
-                                  ? sort?.sort === "ASC"
-                                    ? ArrowUP
-                                    : DownArrow
-                                  : DownArrow
+                          {[
+                            "Position size",
+                            "points",
+                            "PnL",
+                            "percentage of account risked",
+                            "slippage",
+                            "Net ROI",
+                            "Charges",
+                          ].includes(header) && (
+                            <span
+                              className="sort-arrow"
+                              onClick={() =>
+                                setSort((prev) => {
+                                  if (
+                                    prev?.label === "" ||
+                                    prev?.label !== header
+                                  ) {
+                                    sortDataAndUpdateSort(header, "ASC");
+                                  } else if (
+                                    prev?.label === header &&
+                                    prev?.sort === "ASC"
+                                  ) {
+                                    sortDataAndUpdateSort(header, "DESC");
+                                  } else if (
+                                    prev?.label === header &&
+                                    prev?.sort === "DESC"
+                                  ) {
+                                    sortDataAndUpdateSort(header, "ASC");
+                                  }
+                                })
                               }
-                            />
-                          </span>
+                            >
+                              <img
+                                style={{ cursor: "pointer" }}
+                                src={
+                                  sort?.label === header
+                                    ? sort?.sort === "ASC"
+                                      ? ArrowUP
+                                      : DownArrow
+                                    : DownArrow
+                                }
+                              />
+                            </span>
+                          )}
                         </th>
                       ))}
-                      {columnDetail?.length > 0 && Object.keys(columnDetail).length > 0 &&
+
+                      {columnDetail?.length > 0 &&
+                        Object.keys(columnDetail).length > 0 &&
                         columnDetail?.map((header, index) => (
-                          <th key={index}>{header?.column_name}<button onClick={()=>{deleteColumn(header?.id)}}>Delete</button></th>
+                          <th key={index}>
+                            {header?.column_name}
+                            <button
+                              onClick={() => {
+                                deleteColumn(header?.id);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </th>
                         ))}
                       {/* {dynamicColumns.map((customHeader, index) => (
                         <th key={index}>{customHeader}</th>
@@ -1069,7 +1079,8 @@ function TradeLog() {
                             component="div"
                           />
                         </td> */}
-                            {columnDetail && Object.keys(columnDetail).length > 0 &&
+                            {columnDetail &&
+                              Object.keys(columnDetail).length > 0 &&
                               columnDetail?.map((items) => (
                                 <td>
                                   <Field
@@ -1737,7 +1748,7 @@ function TradeLog() {
                                               e.target.value
                                             )
                                           }
-                                          value={item?.trade_penalties}
+                                          value={item?.trade_penalties!=null? item?.trade_penalties : 0}
                                         />
                                         <ErrorMessage
                                           name="trade_penalties"
@@ -1745,7 +1756,7 @@ function TradeLog() {
                                         />
                                       </>
                                     ) : (
-                                      ` ₹ ${item?.trade_penalties}`
+                                      ` ₹ ${item?.trade_penalties!=null? item?.trade_penalties : 0}`
                                     )}
                                   </td>
                                   <td>
@@ -1834,13 +1845,15 @@ function TradeLog() {
                                                   e.target.value
                                                 );
                                               }}
-                                              value={matchAndMapColumns(
-                                                columnDetail,
-                                                item?.dynamicColumn
-                                              ).find(
-                                                (el) =>
-                                                  el?.name === items?.name
-                                              )?.value}
+                                              value={
+                                                matchAndMapColumns(
+                                                  columnDetail,
+                                                  item?.dynamicColumn
+                                                ).find(
+                                                  (el) =>
+                                                    el?.name === items?.name
+                                                )?.value
+                                              }
                                             />
                                             <ErrorMessage
                                               name={`${items?.name}`}
@@ -1942,7 +1955,7 @@ function TradeLog() {
                               </td> */}
 
                                   <td>
-                                  {/* 
+                                    {/* 
                                     {!(id === item?.id) ? (
                                       <button
                                         type="button"
@@ -1963,7 +1976,7 @@ function TradeLog() {
                                       </button>
                                     )}
                                   */}
-                                  </td> 
+                                  </td>
                                 </tr>
                               );
                             }}
@@ -1994,14 +2007,32 @@ function TradeLog() {
             </div>
           )}
           <div className="customFilterButton">
-                  <ul>
-                    <li onClick={togglePopUp}>
-                      Filters{" "}
-                      <span>
-                        <img src={FilterIcon} alt="main filter" />
-                      </span>
-                    </li>
-                  </ul>
+            <div className="textbox">
+              <input
+                type="text"
+                value={searchText}
+                onChange={handleSearchInputChange}
+                placeholder="Search..."
+                style={{
+                  width: "30%",
+                  resize: "none",
+                  padding: "10px",
+                  border: "1px solid rgb(201, 201, 201)",
+                  borderRadius: "12px",
+                  height: "40px",
+                  textAlign: "center",
+                  // marginLeft:"20px"
+                }}
+              />
+              <ul>
+                <li onClick={togglePopUp}>
+                  Filters{" "}
+                  <span>
+                    <img src={FilterIcon} alt="main filter" />
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
           <div className="main-content demo-b">
             <div className="tradelog-tbl">
@@ -2073,9 +2104,19 @@ function TradeLog() {
                             </span>
                           </th>
                         ))}
-                        {columnDetail?.length > 0 && Object.keys(columnDetail).length > 0 &&
+                        {columnDetail?.length > 0 &&
+                          Object.keys(columnDetail).length > 0 &&
                           columnDetail?.map((header, index) => (
-                            <th key={index}>{header?.column_name}<button onClick={()=>{deleteColumn(header?.id)}}>Delete</button></th>
+                            <th key={index}>
+                              {header?.column_name}
+                              <button
+                                onClick={() => {
+                                  deleteColumn(header?.id);
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </th>
                           ))}
                         {/* {dynamicColumns.map((customHeader, index) => (
                         <th key={index}>{customHeader}</th>
@@ -2421,7 +2462,8 @@ function TradeLog() {
                                 </button>
                                 <ErrorMessage name="image" component="div" />
                               </td>
-                              {columnDetail && Object.keys(columnDetail).length > 0 &&
+                              {columnDetail &&
+                                Object.keys(columnDetail).length > 0 &&
                                 columnDetail?.map((items) => (
                                   <td>
                                     <Field

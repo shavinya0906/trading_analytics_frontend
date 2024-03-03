@@ -39,11 +39,9 @@ const PopUpFilter = (props) => {
   const cutomSelection = (index, name) => {
     const hold = JSON.parse(JSON.stringify(allFiltersData)).map(
       (item, i) => {
-        if (i == index && item.selected) {
+        if (i === index && item.selected) {
           if (item.selected.includes(name)) {
-            if (item.selected.length != 1) {
-              item.selected = item.selected.filter((each) => each != name);
-            }
+            item.selected = item.selected.filter((each) => each !== name);
           } else {
             item.selected = [...item.selected, name];
           }
@@ -116,6 +114,14 @@ const PopUpFilter = (props) => {
     const oldEnd = monthRange.ending.toISOString().substring(0, 10);
     const makePayload = `?assetClass=${asset}&conviction=${conv}&strategyUsed=${strag}&minPnL=100&maxPnl=400&holdingTradeType=${holding}&tradingAccount=${tradeAcc}`;
     dispatch(tradeLogUpdateFilter({ token: token, values: makePayload }));
+    const hold = JSON.parse(JSON.stringify(allFiltersData)).map(
+      (item) => {
+        item.selected = []; // Deselect all filter values
+        return item;
+      }
+    );
+    setAllFiltersData(hold);
+    dispatch(newFilterData(hold));
     closePopUp(); 
   };
 
